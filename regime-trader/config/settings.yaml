@@ -1,0 +1,48 @@
+# Central configuration for regime-trader.
+# Update these defaults to match your broker account and risk profile.
+
+broker:
+  paper_trading: true
+  symbols:
+    - USTEC   # NASDAQ 100 on Exness
+  timeframe: M5
+
+hmm:
+  n_components: [2, 3, 4]
+  cv_tol: 1e-3
+  cv_max_iter: 200
+  train_bars: 504
+  stability_bars: 5
+  flicker_window: 40
+  flicker_threshold: 2
+  min_confidence: 0.95
+
+strategy:
+  risk_percent: 0.01
+  ema_9_period: 9
+  ema_200_period: 200
+  atr_period: 14
+  pullback_lookback: 5
+  swing_lookback: 20
+  exhaustion_atr_threshold: 2.0
+  rr_ratio: 2.0
+
+risk:
+  max_risk_per_trade: 0.01
+  max_exposure: 0.80
+  max_leverage: 1.25
+  max_single_position: 0.15
+  max_concurrent_positions: 5
+  max_daily_trades: 20
+  min_position_value: 100.0
+  daily_dd_reduce: 0.02
+  daily_dd_halt: 0.03
+  weekly_dd_reduce: 0.05
+  weekly_dd_halt: 0.07
+  peak_dd_halt: 0.10
+
+model_path: models/hmm_model.pkl
+
+monitoring:
+  dashboard_refresh_seconds: 5
+  alert_rate_limit_minutes: 15

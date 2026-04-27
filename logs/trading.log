@@ -1,0 +1,617 @@
+2026-04-27 16:57:54,724 [WARNING] __main__: Config file not found: settings.yaml
+2026-04-27 16:57:54,725 [INFO] __main__: ============================================================
+2026-04-27 16:57:54,725 [INFO] __main__: TRADING SYSTEM STARTUP
+2026-04-27 16:57:54,725 [INFO] __main__: ============================================================
+2026-04-27 16:57:54,726 [INFO] __main__: Connecting to MetaTrader5 (Exness)...
+2026-04-27 16:57:54,759 [INFO] broker.alpaca_client: MT5 initialized successfully
+2026-04-27 16:57:54,759 [INFO] broker.alpaca_client: [OK] Logged in to Exness-MT5Trial11 account 198256073
+2026-04-27 16:57:54,760 [INFO] __main__: [OK] Account: 198256073
+2026-04-27 16:57:54,760 [INFO] __main__:    Equity: $9,800.33
+2026-04-27 16:57:54,760 [INFO] __main__:    Balance: $9,800.33
+2026-04-27 16:57:54,761 [INFO] __main__:    Leverage: 2000x
+2026-04-27 16:57:54,761 [INFO] broker.alpaca_client: Account: 198256073, Equity: $9,800.33
+2026-04-27 16:57:54,761 [WARNING] broker.alpaca_client: Symbol NAS100 not found. Trying alternatives...
+2026-04-27 16:57:54,762 [INFO] __main__: Market closed for the day. Next open: 09:30 ET
+2026-04-27 16:57:54,762 [WARNING] __main__: Market is closed. Would exit in production.
+2026-04-27 16:57:54,762 [INFO] __main__: Initializing market data client...
+2026-04-27 16:57:54,762 [INFO] __main__: Initializing feature engineer...
+2026-04-27 16:57:54,763 [INFO] __main__: Checking HMM model...
+2026-04-27 16:57:54,766 [INFO] __main__: No HMM model found. Training new model...
+2026-04-27 16:57:54,769 [INFO] __main__: Training HMM model...
+2026-04-27 16:57:54,776 [ERROR] data.market_data: Failed to load CSV c:\Users\USER\Desktop\Trading\regime-trader\data\feeds\NAS100_D1.csv: Missing column provided to 'parse_dates': 'datetime'
+2026-04-27 16:57:54,896 [ERROR] __main__: HMM retraining failed: At least 504 bars are required. Received 485.
+Traceback (most recent call last):
+  File "c:\Users\USER\Desktop\Trading\regime-trader\main.py", line 282, in _retrain_hmm
+    self.hmm_engine.fit(features)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\USER\Desktop\Trading\regime-trader\core\hmm_engine.py", line 111, in fit
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: At least 504 bars are required. Received 485.
+2026-04-27 16:57:54,901 [INFO] __main__: Initializing risk manager...
+2026-04-27 16:57:54,910 [INFO] core.risk_manager: Loaded risk config from c:\Users\USER\Desktop\Trading\regime-trader\config\settings.yaml
+2026-04-27 16:57:54,911 [INFO] __main__: Initializing position tracker...
+2026-04-27 16:57:54,911 [INFO] broker.position_tracker: No open positions
+2026-04-27 16:57:54,911 [INFO] __main__: Initializing signal generator...
+2026-04-27 16:57:54,912 [INFO] __main__: Initializing order executor...
+2026-04-27 16:57:54,912 [INFO] __main__: ============================================================
+2026-04-27 16:57:54,913 [INFO] __main__: SYSTEM STATE
+2026-04-27 16:57:54,913 [INFO] __main__: ============================================================
+2026-04-27 16:57:54,913 [INFO] __main__: Account: 198256073
+2026-04-27 16:57:54,914 [INFO] __main__:   Equity: $9,800.33
+2026-04-27 16:57:54,914 [INFO] __main__:   Margin Used: $0.00
+2026-04-27 16:57:54,914 [INFO] __main__:   Margin Free: $9,800.33
+2026-04-27 16:57:54,914 [INFO] __main__:   Leverage: 2000x
+2026-04-27 16:57:54,915 [INFO] broker.position_tracker: No open positions
+2026-04-27 16:57:54,915 [INFO] __main__: Positions: 0 open
+2026-04-27 16:57:54,915 [INFO] __main__:   Gross Exposure: $0.00
+2026-04-27 16:57:54,916 [INFO] __main__:   Net Exposure: $0.00
+2026-04-27 16:57:54,916 [INFO] __main__:   Leverage Ratio: 0.00x
+2026-04-27 16:57:54,917 [INFO] broker.position_tracker: No open positions
+2026-04-27 16:57:54,917 [CRITICAL] core.risk_manager: [ALERT] PEAK DD CIRCUIT BREAKER: 90.20% >= 10.00% | Equity: $9,800 | Regime: UNKNOWN
+2026-04-27 16:57:54,918 [INFO] __main__: Circuit Breaker Status: CircuitBreakerType.PEAK_DD_HALT
+2026-04-27 16:57:54,918 [INFO] __main__:   Daily Drawdown: +0.00%
+2026-04-27 16:57:54,919 [INFO] __main__:   Weekly Drawdown: +0.00%
+2026-04-27 16:57:54,919 [INFO] __main__:   Peak Drawdown: +90.20%
+2026-04-27 16:57:54,919 [INFO] __main__: ============================================================
+2026-04-27 16:57:54,920 [INFO] __main__: [OK] System online. Starting main loop...
+2026-04-27 16:57:54,920 [INFO] __main__: Main loop started
+2026-04-27 16:57:54,938 [WARNING] data.market_data: No live data for NAS100
+2026-04-27 16:57:54,939 [WARNING] __main__: Insufficient data for NAS100
+2026-04-27 16:57:54,940 [INFO] broker.position_tracker: No open positions
+2026-04-27 16:57:54,940 [CRITICAL] core.risk_manager: [ALERT] PEAK DD CIRCUIT BREAKER: 90.20% >= 10.00% | Equity: $9,800 | Regime: UNKNOWN
+2026-04-27 16:57:54,940 [WARNING] __main__: [STOP] Circuit breaker ACTIVE! Closing all positions...
+2026-04-27 16:57:54,940 [WARNING] broker.position_tracker: [STOP] Emergency close: 0 closed, 0 failed
+2026-04-27 17:00:00,508 [WARNING] data.market_data: No live data for NAS100
+2026-04-27 17:00:00,509 [WARNING] __main__: Insufficient data for NAS100
+2026-04-27 17:00:00,510 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:00:00,510 [CRITICAL] core.risk_manager: [ALERT] PEAK DD CIRCUIT BREAKER: 90.20% >= 10.00% | Equity: $9,800 | Regime: UNKNOWN
+2026-04-27 17:00:00,511 [WARNING] __main__: [STOP] Circuit breaker ACTIVE! Closing all positions...
+2026-04-27 17:00:00,511 [WARNING] broker.position_tracker: [STOP] Emergency close: 0 closed, 0 failed
+2026-04-27 17:02:42,313 [INFO] __main__: Shutdown signal received (2)
+2026-04-27 17:02:42,647 [INFO] __main__: ============================================================
+2026-04-27 17:02:42,648 [INFO] __main__: TRADING SYSTEM SHUTDOWN
+2026-04-27 17:02:42,648 [INFO] __main__: ============================================================
+2026-04-27 17:02:42,650 [INFO] __main__: ============================================================
+2026-04-27 17:02:42,651 [INFO] __main__: SESSION SUMMARY
+2026-04-27 17:02:42,651 [INFO] __main__: ============================================================
+2026-04-27 17:02:42,651 [INFO] __main__: Start Time: 2026-04-27T16:57:54.725109
+2026-04-27 17:02:42,651 [INFO] __main__: End Time: 2026-04-27T17:02:42.651843
+2026-04-27 17:02:42,652 [INFO] __main__: Bars Processed: 0
+2026-04-27 17:02:42,652 [INFO] __main__: Signals Generated: 0
+2026-04-27 17:02:42,652 [INFO] __main__: Signals Rejected: 0
+2026-04-27 17:02:42,652 [INFO] __main__: Orders Submitted: 0
+2026-04-27 17:02:42,653 [INFO] __main__: HMM Retrains: 0
+2026-04-27 17:02:42,653 [INFO] __main__: Final Positions: 0 open
+2026-04-27 17:02:42,653 [INFO] __main__: Total P&L: $0.00
+2026-04-27 17:02:42,653 [INFO] __main__: ============================================================
+2026-04-27 17:02:42,654 [INFO] broker.alpaca_client: MT5 shutdown complete
+2026-04-27 17:02:42,654 [INFO] __main__: MT5 connection closed
+2026-04-27 17:02:42,654 [INFO] __main__: [OK] Shutdown complete
+2026-04-27 17:03:09,991 [WARNING] __main__: Config file not found: config/settings.yaml
+2026-04-27 17:03:09,991 [INFO] __main__: ============================================================
+2026-04-27 17:03:09,991 [INFO] __main__: TRADING SYSTEM STARTUP
+2026-04-27 17:03:09,992 [INFO] __main__: ============================================================
+2026-04-27 17:03:09,992 [INFO] __main__: Connecting to MetaTrader5 (Exness)...
+2026-04-27 17:03:10,099 [INFO] broker.alpaca_client: MT5 initialized successfully
+2026-04-27 17:03:10,101 [INFO] broker.alpaca_client: [OK] Logged in to Exness-MT5Trial11 account 198256073
+2026-04-27 17:03:10,101 [INFO] __main__: [OK] Account: 198256073
+2026-04-27 17:03:10,102 [INFO] __main__:    Equity: $9,800.33
+2026-04-27 17:03:10,102 [INFO] __main__:    Balance: $9,800.33
+2026-04-27 17:03:10,102 [INFO] __main__:    Leverage: 2000x
+2026-04-27 17:03:10,103 [INFO] broker.alpaca_client: Account: 198256073, Equity: $9,800.33
+2026-04-27 17:03:10,103 [WARNING] broker.alpaca_client: Symbol USTEC not found. Trying alternatives...
+2026-04-27 17:03:10,104 [INFO] broker.alpaca_client: [OK] USTECm available
+2026-04-27 17:03:10,104 [INFO] __main__: Market closed for the day. Next open: 09:30 ET
+2026-04-27 17:03:10,104 [WARNING] __main__: Market is closed. Would exit in production.
+2026-04-27 17:03:10,105 [INFO] __main__: Initializing market data client...
+2026-04-27 17:03:10,105 [INFO] __main__: Initializing feature engineer...
+2026-04-27 17:03:10,105 [INFO] __main__: Checking HMM model...
+2026-04-27 17:03:10,106 [INFO] __main__: No HMM model found. Training new model...
+2026-04-27 17:03:10,106 [INFO] __main__: Training HMM model...
+2026-04-27 17:03:10,107 [WARNING] data.market_data: CSV file not found: c:\Users\USER\Desktop\Trading\regime-trader\data\feeds\USTEC_D1.csv. Generating mock data.
+2026-04-27 17:03:10,243 [ERROR] __main__: HMM retraining failed: At least 504 bars are required. Received 485.
+Traceback (most recent call last):
+  File "c:\Users\USER\Desktop\Trading\regime-trader\main.py", line 284, in _retrain_hmm
+    self.hmm_engine.fit(features)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\USER\Desktop\Trading\regime-trader\core\hmm_engine.py", line 111, in fit
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: At least 504 bars are required. Received 485.
+2026-04-27 17:03:10,246 [INFO] __main__: Initializing risk manager...
+2026-04-27 17:03:10,255 [INFO] core.risk_manager: Loaded risk config from c:\Users\USER\Desktop\Trading\regime-trader\config\settings.yaml
+2026-04-27 17:03:10,256 [INFO] core.risk_manager: [OK] Circuit breaker baseline set to $9800.33
+2026-04-27 17:03:10,256 [INFO] __main__: Initializing position tracker...
+2026-04-27 17:03:10,256 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:03:10,256 [INFO] __main__: Initializing signal generator...
+2026-04-27 17:03:10,257 [INFO] __main__: Initializing order executor...
+2026-04-27 17:03:10,258 [INFO] __main__: Recovered state from 2026-04-27T16:57:54.725109
+2026-04-27 17:03:10,259 [INFO] __main__: ============================================================
+2026-04-27 17:03:10,259 [INFO] __main__: SYSTEM STATE
+2026-04-27 17:03:10,259 [INFO] __main__: ============================================================
+2026-04-27 17:03:10,260 [INFO] __main__: Account: 198256073
+2026-04-27 17:03:10,260 [INFO] __main__:   Equity: $9,800.33
+2026-04-27 17:03:10,260 [INFO] __main__:   Margin Used: $0.00
+2026-04-27 17:03:10,260 [INFO] __main__:   Margin Free: $9,800.33
+2026-04-27 17:03:10,260 [INFO] __main__:   Leverage: 2000x
+2026-04-27 17:03:10,261 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:03:10,261 [INFO] __main__: Positions: 0 open
+2026-04-27 17:03:10,261 [INFO] __main__:   Gross Exposure: $0.00
+2026-04-27 17:03:10,262 [INFO] __main__:   Net Exposure: $0.00
+2026-04-27 17:03:10,262 [INFO] __main__:   Leverage Ratio: 0.00x
+2026-04-27 17:03:10,262 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:03:10,263 [INFO] __main__: Circuit Breaker Status: CircuitBreakerType.NONE
+2026-04-27 17:03:10,263 [INFO] __main__:   Daily Drawdown: +0.00%
+2026-04-27 17:03:10,263 [INFO] __main__:   Weekly Drawdown: +0.00%
+2026-04-27 17:03:10,263 [INFO] __main__:   Peak Drawdown: +0.00%
+2026-04-27 17:03:10,264 [INFO] __main__: ============================================================
+2026-04-27 17:03:10,264 [INFO] __main__: [OK] System online. Starting main loop...
+2026-04-27 17:03:10,264 [INFO] __main__: Main loop started
+2026-04-27 17:03:10,290 [WARNING] data.market_data: No live data for USTEC
+2026-04-27 17:03:10,291 [WARNING] __main__: Insufficient data for USTEC
+2026-04-27 17:03:10,291 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:03:10,292 [WARNING] __main__: [STOP] Circuit breaker ACTIVE! Closing all positions...
+2026-04-27 17:03:10,292 [WARNING] broker.position_tracker: [STOP] Emergency close: 0 closed, 0 failed
+2026-04-27 17:05:00,614 [WARNING] data.market_data: No live data for USTEC
+2026-04-27 17:05:00,615 [WARNING] __main__: Insufficient data for USTEC
+2026-04-27 17:05:00,615 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:05:00,616 [WARNING] __main__: [STOP] Circuit breaker ACTIVE! Closing all positions...
+2026-04-27 17:05:00,616 [WARNING] broker.position_tracker: [STOP] Emergency close: 0 closed, 0 failed
+2026-04-27 17:07:01,034 [INFO] __main__: Shutdown signal received (2)
+2026-04-27 17:07:01,794 [INFO] __main__: ============================================================
+2026-04-27 17:07:01,794 [INFO] __main__: TRADING SYSTEM SHUTDOWN
+2026-04-27 17:07:01,795 [INFO] __main__: ============================================================
+2026-04-27 17:07:01,797 [INFO] __main__: ============================================================
+2026-04-27 17:07:01,797 [INFO] __main__: SESSION SUMMARY
+2026-04-27 17:07:01,798 [INFO] __main__: ============================================================
+2026-04-27 17:07:01,798 [INFO] __main__: Start Time: 2026-04-27T16:57:54.725109
+2026-04-27 17:07:01,799 [INFO] __main__: End Time: 2026-04-27T17:07:01.799188
+2026-04-27 17:07:01,799 [INFO] __main__: Bars Processed: 0
+2026-04-27 17:07:01,799 [INFO] __main__: Signals Generated: 0
+2026-04-27 17:07:01,799 [INFO] __main__: Signals Rejected: 0
+2026-04-27 17:07:01,800 [INFO] __main__: Orders Submitted: 0
+2026-04-27 17:07:01,800 [INFO] __main__: HMM Retrains: 0
+2026-04-27 17:07:01,800 [INFO] __main__: Final Positions: 0 open
+2026-04-27 17:07:01,801 [INFO] __main__: Total P&L: $0.00
+2026-04-27 17:07:01,801 [INFO] __main__: ============================================================
+2026-04-27 17:07:01,801 [INFO] broker.alpaca_client: MT5 shutdown complete
+2026-04-27 17:07:01,802 [INFO] __main__: MT5 connection closed
+2026-04-27 17:07:01,802 [INFO] __main__: [OK] Shutdown complete
+2026-04-27 17:07:11,369 [WARNING] __main__: Config file not found: config/settings.yaml
+2026-04-27 17:07:11,370 [INFO] __main__: ============================================================
+2026-04-27 17:07:11,370 [INFO] __main__: TRADING SYSTEM STARTUP
+2026-04-27 17:07:11,371 [INFO] __main__: ============================================================
+2026-04-27 17:07:11,371 [INFO] __main__: Connecting to MetaTrader5 (Exness)...
+2026-04-27 17:07:11,411 [INFO] broker.alpaca_client: MT5 initialized successfully
+2026-04-27 17:07:11,412 [INFO] broker.alpaca_client: [OK] Logged in to Exness-MT5Trial11 account 198256073
+2026-04-27 17:07:11,412 [INFO] __main__: [OK] Account: 198256073
+2026-04-27 17:07:11,413 [INFO] __main__:    Equity: $9,800.33
+2026-04-27 17:07:11,414 [INFO] __main__:    Balance: $9,800.33
+2026-04-27 17:07:11,414 [INFO] __main__:    Leverage: 2000x
+2026-04-27 17:07:11,415 [INFO] broker.alpaca_client: Account: 198256073, Equity: $9,800.33
+2026-04-27 17:07:11,415 [WARNING] broker.alpaca_client: Symbol USTEC not found. Trying alternatives...
+2026-04-27 17:07:11,416 [INFO] broker.alpaca_client: [OK] USTECm available
+2026-04-27 17:07:11,417 [INFO] __main__: Market closed for the day. Next open: 09:30 ET
+2026-04-27 17:07:11,418 [WARNING] __main__: Market is closed. Would exit in production.
+2026-04-27 17:07:11,418 [INFO] __main__: Initializing market data client...
+2026-04-27 17:07:11,419 [INFO] __main__: Initializing feature engineer...
+2026-04-27 17:07:11,419 [INFO] __main__: Checking HMM model...
+2026-04-27 17:07:11,420 [INFO] __main__: No HMM model found. Training new model...
+2026-04-27 17:07:11,420 [INFO] __main__: Training HMM model...
+2026-04-27 17:07:11,426 [ERROR] data.market_data: Failed to load CSV c:\Users\USER\Desktop\Trading\regime-trader\data\feeds\USTEC_D1.csv: Missing column provided to 'parse_dates': 'datetime'
+2026-04-27 17:07:11,427 [ERROR] __main__: No data for HMM training
+2026-04-27 17:07:11,428 [INFO] __main__: Initializing risk manager...
+2026-04-27 17:07:11,438 [INFO] core.risk_manager: Loaded risk config from c:\Users\USER\Desktop\Trading\regime-trader\config\settings.yaml
+2026-04-27 17:07:11,438 [INFO] core.risk_manager: [OK] Circuit breaker baseline set to $9800.33
+2026-04-27 17:07:11,439 [INFO] __main__: Initializing position tracker...
+2026-04-27 17:07:11,440 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:07:11,441 [INFO] __main__: Initializing signal generator...
+2026-04-27 17:07:11,441 [INFO] __main__: Initializing order executor...
+2026-04-27 17:07:11,444 [INFO] __main__: Recovered state from 2026-04-27T16:57:54.725109
+2026-04-27 17:07:11,444 [INFO] __main__: ============================================================
+2026-04-27 17:07:11,444 [INFO] __main__: SYSTEM STATE
+2026-04-27 17:07:11,445 [INFO] __main__: ============================================================
+2026-04-27 17:07:11,445 [INFO] __main__: Account: 198256073
+2026-04-27 17:07:11,445 [INFO] __main__:   Equity: $9,800.33
+2026-04-27 17:07:11,446 [INFO] __main__:   Margin Used: $0.00
+2026-04-27 17:07:11,446 [INFO] __main__:   Margin Free: $9,800.33
+2026-04-27 17:07:11,446 [INFO] __main__:   Leverage: 2000x
+2026-04-27 17:07:11,447 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:07:11,447 [INFO] __main__: Positions: 0 open
+2026-04-27 17:07:11,447 [INFO] __main__:   Gross Exposure: $0.00
+2026-04-27 17:07:11,448 [INFO] __main__:   Net Exposure: $0.00
+2026-04-27 17:07:11,449 [INFO] __main__:   Leverage Ratio: 0.00x
+2026-04-27 17:07:11,450 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:07:11,450 [INFO] __main__: Circuit Breaker Status: CircuitBreakerType.NONE
+2026-04-27 17:07:11,451 [INFO] __main__:   Daily Drawdown: +0.00%
+2026-04-27 17:07:11,451 [INFO] __main__:   Weekly Drawdown: +0.00%
+2026-04-27 17:07:11,451 [INFO] __main__:   Peak Drawdown: +0.00%
+2026-04-27 17:07:11,452 [INFO] __main__: ============================================================
+2026-04-27 17:07:11,452 [INFO] __main__: [OK] System online. Starting main loop...
+2026-04-27 17:07:11,452 [INFO] __main__: Main loop started
+2026-04-27 17:07:11,478 [WARNING] data.market_data: No live data for USTEC
+2026-04-27 17:07:11,480 [WARNING] __main__: Insufficient data for USTEC
+2026-04-27 17:10:00,679 [WARNING] data.market_data: No live data for USTEC
+2026-04-27 17:10:00,680 [WARNING] __main__: Insufficient data for USTEC
+2026-04-27 17:12:10,919 [INFO] __main__: Shutdown signal received (2)
+2026-04-27 17:12:11,793 [INFO] __main__: ============================================================
+2026-04-27 17:12:11,794 [INFO] __main__: TRADING SYSTEM SHUTDOWN
+2026-04-27 17:12:11,794 [INFO] __main__: ============================================================
+2026-04-27 17:12:11,795 [INFO] __main__: ============================================================
+2026-04-27 17:12:11,796 [INFO] __main__: SESSION SUMMARY
+2026-04-27 17:12:11,796 [INFO] __main__: ============================================================
+2026-04-27 17:12:11,796 [INFO] __main__: Start Time: 2026-04-27T16:57:54.725109
+2026-04-27 17:12:11,796 [INFO] __main__: End Time: 2026-04-27T17:12:11.796907
+2026-04-27 17:12:11,797 [INFO] __main__: Bars Processed: 2
+2026-04-27 17:12:11,797 [INFO] __main__: Signals Generated: 0
+2026-04-27 17:12:11,797 [INFO] __main__: Signals Rejected: 0
+2026-04-27 17:12:11,798 [INFO] __main__: Orders Submitted: 0
+2026-04-27 17:12:11,798 [INFO] __main__: HMM Retrains: 0
+2026-04-27 17:12:11,798 [INFO] __main__: Final Positions: 0 open
+2026-04-27 17:12:11,798 [INFO] __main__: Total P&L: $0.00
+2026-04-27 17:12:11,799 [INFO] __main__: ============================================================
+2026-04-27 17:12:11,799 [INFO] broker.alpaca_client: MT5 shutdown complete
+2026-04-27 17:12:11,799 [INFO] __main__: MT5 connection closed
+2026-04-27 17:12:11,799 [INFO] __main__: [OK] Shutdown complete
+2026-04-27 17:12:20,497 [WARNING] __main__: Config file not found: config/settings.yaml
+2026-04-27 17:12:20,497 [INFO] __main__: ============================================================
+2026-04-27 17:12:20,498 [INFO] __main__: TRADING SYSTEM STARTUP
+2026-04-27 17:12:20,498 [INFO] __main__: ============================================================
+2026-04-27 17:12:20,498 [INFO] __main__: Connecting to MetaTrader5 (Exness)...
+2026-04-27 17:12:20,527 [INFO] broker.alpaca_client: MT5 initialized successfully
+2026-04-27 17:12:20,528 [INFO] broker.alpaca_client: [OK] Logged in to Exness-MT5Trial11 account 198256073
+2026-04-27 17:12:20,528 [INFO] __main__: [OK] Account: 198256073
+2026-04-27 17:12:20,529 [INFO] __main__:    Equity: $9,800.33
+2026-04-27 17:12:20,529 [INFO] __main__:    Balance: $9,800.33
+2026-04-27 17:12:20,529 [INFO] __main__:    Leverage: 2000x
+2026-04-27 17:12:20,529 [INFO] broker.alpaca_client: Account: 198256073, Equity: $9,800.33
+2026-04-27 17:12:20,530 [WARNING] broker.alpaca_client: Symbol USTEC not found. Trying alternatives...
+2026-04-27 17:12:20,530 [INFO] broker.alpaca_client: [OK] USTECm available
+2026-04-27 17:12:20,530 [INFO] __main__: Market closed for the day. Next open: 09:30 ET
+2026-04-27 17:12:20,530 [WARNING] __main__: Market is closed. Would exit in production.
+2026-04-27 17:12:20,531 [INFO] __main__: Initializing market data client...
+2026-04-27 17:12:20,531 [INFO] __main__: Initializing feature engineer...
+2026-04-27 17:12:20,531 [INFO] __main__: Checking HMM model...
+2026-04-27 17:12:20,531 [INFO] __main__: No HMM model found. Training new model...
+2026-04-27 17:12:20,532 [INFO] __main__: Training HMM model...
+2026-04-27 17:12:20,624 [ERROR] __main__: HMM retraining failed: Features are empty.
+Traceback (most recent call last):
+  File "c:\Users\USER\Desktop\Trading\regime-trader\main.py", line 284, in _retrain_hmm
+    self.hmm_engine.fit(features)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\USER\Desktop\Trading\regime-trader\core\hmm_engine.py", line 109, in fit
+    raise ValueError("Features are empty.")
+ValueError: Features are empty.
+2026-04-27 17:12:20,628 [INFO] __main__: Initializing risk manager...
+2026-04-27 17:12:20,635 [INFO] core.risk_manager: Loaded risk config from c:\Users\USER\Desktop\Trading\regime-trader\config\settings.yaml
+2026-04-27 17:12:20,636 [INFO] core.risk_manager: [OK] Circuit breaker baseline set to $9800.33
+2026-04-27 17:12:20,636 [INFO] __main__: Initializing position tracker...
+2026-04-27 17:12:20,636 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:12:20,636 [INFO] __main__: Initializing signal generator...
+2026-04-27 17:12:20,637 [INFO] __main__: Initializing order executor...
+2026-04-27 17:12:20,638 [INFO] __main__: Recovered state from 2026-04-27T16:57:54.725109
+2026-04-27 17:12:20,639 [INFO] __main__: ============================================================
+2026-04-27 17:12:20,639 [INFO] __main__: SYSTEM STATE
+2026-04-27 17:12:20,639 [INFO] __main__: ============================================================
+2026-04-27 17:12:20,640 [INFO] __main__: Account: 198256073
+2026-04-27 17:12:20,640 [INFO] __main__:   Equity: $9,800.33
+2026-04-27 17:12:20,640 [INFO] __main__:   Margin Used: $0.00
+2026-04-27 17:12:20,641 [INFO] __main__:   Margin Free: $9,800.33
+2026-04-27 17:12:20,641 [INFO] __main__:   Leverage: 2000x
+2026-04-27 17:12:20,641 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:12:20,642 [INFO] __main__: Positions: 0 open
+2026-04-27 17:12:20,642 [INFO] __main__:   Gross Exposure: $0.00
+2026-04-27 17:12:20,642 [INFO] __main__:   Net Exposure: $0.00
+2026-04-27 17:12:20,643 [INFO] __main__:   Leverage Ratio: 0.00x
+2026-04-27 17:12:20,643 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:12:20,643 [INFO] __main__: Circuit Breaker Status: CircuitBreakerType.NONE
+2026-04-27 17:12:20,644 [INFO] __main__:   Daily Drawdown: +0.00%
+2026-04-27 17:12:20,644 [INFO] __main__:   Weekly Drawdown: +0.00%
+2026-04-27 17:12:20,644 [INFO] __main__:   Peak Drawdown: +0.00%
+2026-04-27 17:12:20,644 [INFO] __main__: ============================================================
+2026-04-27 17:12:20,645 [INFO] __main__: [OK] System online. Starting main loop...
+2026-04-27 17:12:20,645 [INFO] __main__: Main loop started
+2026-04-27 17:12:20,666 [WARNING] data.market_data: No live data for USTEC
+2026-04-27 17:12:20,667 [WARNING] __main__: Insufficient data for USTEC
+2026-04-27 17:15:00,834 [WARNING] data.market_data: No live data for USTEC
+2026-04-27 17:15:00,835 [WARNING] __main__: Insufficient data for USTEC
+2026-04-27 17:15:19,208 [INFO] __main__: Shutdown signal received (2)
+2026-04-27 17:15:19,845 [INFO] __main__: ============================================================
+2026-04-27 17:15:19,845 [INFO] __main__: TRADING SYSTEM SHUTDOWN
+2026-04-27 17:15:19,846 [INFO] __main__: ============================================================
+2026-04-27 17:15:19,847 [INFO] __main__: ============================================================
+2026-04-27 17:15:19,848 [INFO] __main__: SESSION SUMMARY
+2026-04-27 17:15:19,848 [INFO] __main__: ============================================================
+2026-04-27 17:15:19,848 [INFO] __main__: Start Time: 2026-04-27T16:57:54.725109
+2026-04-27 17:15:19,848 [INFO] __main__: End Time: 2026-04-27T17:15:19.848976
+2026-04-27 17:15:19,849 [INFO] __main__: Bars Processed: 2
+2026-04-27 17:15:19,849 [INFO] __main__: Signals Generated: 0
+2026-04-27 17:15:19,849 [INFO] __main__: Signals Rejected: 0
+2026-04-27 17:15:19,849 [INFO] __main__: Orders Submitted: 0
+2026-04-27 17:15:19,850 [INFO] __main__: HMM Retrains: 0
+2026-04-27 17:15:19,850 [INFO] __main__: Final Positions: 0 open
+2026-04-27 17:15:19,850 [INFO] __main__: Total P&L: $0.00
+2026-04-27 17:15:19,850 [INFO] __main__: ============================================================
+2026-04-27 17:15:19,850 [INFO] broker.alpaca_client: MT5 shutdown complete
+2026-04-27 17:15:19,851 [INFO] __main__: MT5 connection closed
+2026-04-27 17:15:19,851 [INFO] __main__: [OK] Shutdown complete
+2026-04-27 17:15:28,261 [WARNING] __main__: Config file not found: config/settings.yaml
+2026-04-27 17:15:28,262 [INFO] __main__: ============================================================
+2026-04-27 17:15:28,262 [INFO] __main__: TRADING SYSTEM STARTUP
+2026-04-27 17:15:28,262 [INFO] __main__: ============================================================
+2026-04-27 17:15:28,263 [INFO] __main__: Connecting to MetaTrader5 (Exness)...
+2026-04-27 17:15:28,292 [INFO] broker.alpaca_client: MT5 initialized successfully
+2026-04-27 17:15:28,292 [INFO] broker.alpaca_client: [OK] Logged in to Exness-MT5Trial11 account 198256073
+2026-04-27 17:15:28,293 [INFO] __main__: [OK] Account: 198256073
+2026-04-27 17:15:28,294 [INFO] __main__:    Equity: $9,800.33
+2026-04-27 17:15:28,294 [INFO] __main__:    Balance: $9,800.33
+2026-04-27 17:15:28,294 [INFO] __main__:    Leverage: 2000x
+2026-04-27 17:15:28,295 [INFO] broker.alpaca_client: Account: 198256073, Equity: $9,800.33
+2026-04-27 17:15:28,295 [WARNING] broker.alpaca_client: Symbol USTEC not found. Trying alternatives...
+2026-04-27 17:15:28,295 [INFO] broker.alpaca_client: [OK] USTECm available
+2026-04-27 17:15:28,296 [INFO] __main__: Market closed for the day. Next open: 09:30 ET
+2026-04-27 17:15:28,296 [WARNING] __main__: Market is closed. Would exit in production.
+2026-04-27 17:15:28,296 [INFO] __main__: Initializing market data client...
+2026-04-27 17:15:28,296 [INFO] __main__: Initializing feature engineer...
+2026-04-27 17:15:28,297 [INFO] __main__: Checking HMM model...
+2026-04-27 17:15:28,297 [INFO] __main__: No HMM model found. Training new model...
+2026-04-27 17:15:28,297 [INFO] __main__: Training HMM model...
+2026-04-27 17:15:28,385 [ERROR] __main__: HMM retraining failed: Features are empty.
+Traceback (most recent call last):
+  File "c:\Users\USER\Desktop\Trading\regime-trader\main.py", line 284, in _retrain_hmm
+    self.hmm_engine.fit(features)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\USER\Desktop\Trading\regime-trader\core\hmm_engine.py", line 109, in fit
+    raise ValueError("Features are empty.")
+ValueError: Features are empty.
+2026-04-27 17:15:28,389 [INFO] __main__: Initializing risk manager...
+2026-04-27 17:15:28,396 [INFO] core.risk_manager: Loaded risk config from c:\Users\USER\Desktop\Trading\regime-trader\config\settings.yaml
+2026-04-27 17:15:28,396 [INFO] core.risk_manager: [OK] Circuit breaker baseline set to $9800.33
+2026-04-27 17:15:28,396 [INFO] __main__: Initializing position tracker...
+2026-04-27 17:15:28,397 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:15:28,397 [INFO] __main__: Initializing signal generator...
+2026-04-27 17:15:28,397 [INFO] __main__: Initializing order executor...
+2026-04-27 17:15:28,399 [INFO] __main__: Recovered state from 2026-04-27T16:57:54.725109
+2026-04-27 17:15:28,399 [INFO] __main__: ============================================================
+2026-04-27 17:15:28,399 [INFO] __main__: SYSTEM STATE
+2026-04-27 17:15:28,399 [INFO] __main__: ============================================================
+2026-04-27 17:15:28,400 [INFO] __main__: Account: 198256073
+2026-04-27 17:15:28,400 [INFO] __main__:   Equity: $9,800.33
+2026-04-27 17:15:28,400 [INFO] __main__:   Margin Used: $0.00
+2026-04-27 17:15:28,400 [INFO] __main__:   Margin Free: $9,800.33
+2026-04-27 17:15:28,400 [INFO] __main__:   Leverage: 2000x
+2026-04-27 17:15:28,401 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:15:28,401 [INFO] __main__: Positions: 0 open
+2026-04-27 17:15:28,401 [INFO] __main__:   Gross Exposure: $0.00
+2026-04-27 17:15:28,402 [INFO] __main__:   Net Exposure: $0.00
+2026-04-27 17:15:28,402 [INFO] __main__:   Leverage Ratio: 0.00x
+2026-04-27 17:15:28,402 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:15:28,403 [INFO] __main__: Circuit Breaker Status: CircuitBreakerType.NONE
+2026-04-27 17:15:28,403 [INFO] __main__:   Daily Drawdown: +0.00%
+2026-04-27 17:15:28,403 [INFO] __main__:   Weekly Drawdown: +0.00%
+2026-04-27 17:15:28,404 [INFO] __main__:   Peak Drawdown: +0.00%
+2026-04-27 17:15:28,404 [INFO] __main__: ============================================================
+2026-04-27 17:15:28,404 [INFO] __main__: [OK] System online. Starting main loop...
+2026-04-27 17:15:28,404 [INFO] __main__: Main loop started
+2026-04-27 17:15:28,423 [WARNING] data.market_data: No live data for USTEC
+2026-04-27 17:15:28,424 [WARNING] __main__: Insufficient data for USTEC
+2026-04-27 17:17:44,025 [INFO] __main__: Shutdown signal received (2)
+2026-04-27 17:17:44,475 [INFO] __main__: ============================================================
+2026-04-27 17:17:44,475 [INFO] __main__: TRADING SYSTEM SHUTDOWN
+2026-04-27 17:17:44,476 [INFO] __main__: ============================================================
+2026-04-27 17:17:44,477 [INFO] __main__: ============================================================
+2026-04-27 17:17:44,477 [INFO] __main__: SESSION SUMMARY
+2026-04-27 17:17:44,477 [INFO] __main__: ============================================================
+2026-04-27 17:17:44,478 [INFO] __main__: Start Time: 2026-04-27T16:57:54.725109
+2026-04-27 17:17:44,478 [INFO] __main__: End Time: 2026-04-27T17:17:44.478628
+2026-04-27 17:17:44,478 [INFO] __main__: Bars Processed: 1
+2026-04-27 17:17:44,479 [INFO] __main__: Signals Generated: 0
+2026-04-27 17:17:44,479 [INFO] __main__: Signals Rejected: 0
+2026-04-27 17:17:44,479 [INFO] __main__: Orders Submitted: 0
+2026-04-27 17:17:44,479 [INFO] __main__: HMM Retrains: 0
+2026-04-27 17:17:44,479 [INFO] __main__: Final Positions: 0 open
+2026-04-27 17:17:44,480 [INFO] __main__: Total P&L: $0.00
+2026-04-27 17:17:44,480 [INFO] __main__: ============================================================
+2026-04-27 17:17:44,480 [INFO] broker.alpaca_client: MT5 shutdown complete
+2026-04-27 17:17:44,480 [INFO] __main__: MT5 connection closed
+2026-04-27 17:17:44,481 [INFO] __main__: [OK] Shutdown complete
+2026-04-27 17:17:52,104 [WARNING] __main__: Config file not found: config/settings.yaml
+2026-04-27 17:17:52,105 [INFO] __main__: ============================================================
+2026-04-27 17:17:52,105 [INFO] __main__: TRADING SYSTEM STARTUP
+2026-04-27 17:17:52,105 [INFO] __main__: ============================================================
+2026-04-27 17:17:52,106 [INFO] __main__: Connecting to MetaTrader5 (Exness)...
+2026-04-27 17:17:52,135 [INFO] broker.alpaca_client: MT5 initialized successfully
+2026-04-27 17:17:52,136 [INFO] broker.alpaca_client: [OK] Logged in to Exness-MT5Trial11 account 198256073
+2026-04-27 17:17:52,136 [INFO] __main__: [OK] Account: 198256073
+2026-04-27 17:17:52,137 [INFO] __main__:    Equity: $9,800.33
+2026-04-27 17:17:52,137 [INFO] __main__:    Balance: $9,800.33
+2026-04-27 17:17:52,137 [INFO] __main__:    Leverage: 2000x
+2026-04-27 17:17:52,138 [INFO] broker.alpaca_client: Account: 198256073, Equity: $9,800.33
+2026-04-27 17:17:52,138 [WARNING] broker.alpaca_client: Symbol USTEC not found. Trying alternatives...
+2026-04-27 17:17:52,138 [INFO] broker.alpaca_client: [OK] USTECm available
+2026-04-27 17:17:52,138 [INFO] __main__: Market closed for the day. Next open: 09:30 ET
+2026-04-27 17:17:52,139 [WARNING] __main__: Market is closed. Would exit in production.
+2026-04-27 17:17:52,139 [INFO] __main__: Initializing market data client...
+2026-04-27 17:17:52,139 [INFO] __main__: Initializing feature engineer...
+2026-04-27 17:17:52,140 [INFO] __main__: Checking HMM model...
+2026-04-27 17:17:52,140 [INFO] __main__: No HMM model found. Training new model...
+2026-04-27 17:17:52,140 [INFO] __main__: Training HMM model...
+2026-04-27 17:17:52,164 [INFO] __main__: HMM retrain input bars: 1081
+2026-04-27 17:17:52,278 [INFO] __main__: HMM retrain features: (631, 13)
+2026-04-27 17:17:54,648 [INFO] core.hmm_engine: HMM candidate n_components=3 log_likelihood=-1.594152 bic=2539.693121 converged=True iterations=11
+2026-04-27 17:17:55,036 [INFO] core.hmm_engine: HMM candidate n_components=4 log_likelihood=-0.091153 bic=2362.772146 converged=True iterations=10
+2026-04-27 17:17:55,526 [INFO] core.hmm_engine: HMM candidate n_components=5 log_likelihood=1.921015 bic=1929.229147 converged=True iterations=12
+2026-04-27 17:17:56,017 [INFO] core.hmm_engine: HMM candidate n_components=6 log_likelihood=2.805642 bic=2063.967228 converged=True iterations=13
+2026-04-27 17:17:56,520 [INFO] core.hmm_engine: HMM candidate n_components=7 log_likelihood=4.748813 bic=1665.199348 converged=True iterations=13
+2026-04-27 17:17:56,520 [INFO] core.hmm_engine: HMM candidate BIC scores: {3: 2539.6931214986025, 4: 2362.772146156857, 5: 1929.229147059922, 6: 2063.967228374935, 7: 1665.1993481303643}
+2026-04-27 17:17:56,521 [INFO] core.hmm_engine: Selected HMM model n_components=7 bic=1665.199348 log_likelihood=4.748813 converged=True iterations=13
+2026-04-27 17:17:57,089 [WARNING] core.hmm_engine: Regime change confirmed: 4 -> 3
+2026-04-27 17:17:57,090 [INFO] core.hmm_engine: Regime 3 confirmed after persistence window.
+2026-04-27 17:17:57,091 [WARNING] core.hmm_engine: Regime change confirmed: 3 -> 5
+2026-04-27 17:17:57,092 [INFO] core.hmm_engine: Regime 5 confirmed after persistence window.
+2026-04-27 17:17:57,092 [WARNING] core.hmm_engine: Regime change confirmed: 5 -> 6
+2026-04-27 17:17:57,092 [INFO] core.hmm_engine: Regime 6 confirmed after persistence window.
+2026-04-27 17:17:57,093 [WARNING] core.hmm_engine: Regime change confirmed: 6 -> 0
+2026-04-27 17:17:57,093 [INFO] core.hmm_engine: Regime 0 confirmed after persistence window.
+2026-04-27 17:17:57,093 [WARNING] core.hmm_engine: Regime change confirmed: 0 -> 1
+2026-04-27 17:17:57,094 [INFO] core.hmm_engine: Regime 1 confirmed after persistence window.
+2026-04-27 17:17:57,094 [WARNING] core.hmm_engine: Regime change confirmed: 1 -> 0
+2026-04-27 17:17:57,094 [INFO] core.hmm_engine: Regime 0 confirmed after persistence window.
+2026-04-27 17:17:57,094 [WARNING] core.hmm_engine: Regime change confirmed: 0 -> 1
+2026-04-27 17:17:57,094 [INFO] core.hmm_engine: Regime 1 confirmed after persistence window.
+2026-04-27 17:17:57,095 [WARNING] core.hmm_engine: Regime change confirmed: 1 -> 2
+2026-04-27 17:17:57,095 [INFO] core.hmm_engine: Regime 2 confirmed after persistence window.
+2026-04-27 17:17:57,095 [WARNING] core.hmm_engine: Regime change confirmed: 2 -> 1
+2026-04-27 17:17:57,096 [INFO] core.hmm_engine: Regime 1 confirmed after persistence window.
+2026-04-27 17:17:57,096 [WARNING] core.hmm_engine: Regime change confirmed: 1 -> 2
+2026-04-27 17:17:57,096 [INFO] core.hmm_engine: Regime 2 confirmed after persistence window.
+2026-04-27 17:17:57,097 [WARNING] core.hmm_engine: Regime change confirmed: 2 -> 5
+2026-04-27 17:17:57,097 [INFO] core.hmm_engine: Regime 5 confirmed after persistence window.
+2026-04-27 17:17:57,102 [ERROR] __main__: HMM retraining failed: 'HMMEngine' object has no attribute 'save'
+Traceback (most recent call last):
+  File "c:\Users\USER\Desktop\Trading\regime-trader\main.py", line 292, in _retrain_hmm
+    self.hmm_engine.save(str(model_path))
+    ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'HMMEngine' object has no attribute 'save'
+2026-04-27 17:17:57,104 [INFO] __main__: Initializing risk manager...
+2026-04-27 17:17:57,111 [INFO] core.risk_manager: Loaded risk config from c:\Users\USER\Desktop\Trading\regime-trader\config\settings.yaml
+2026-04-27 17:17:57,111 [INFO] core.risk_manager: [OK] Circuit breaker baseline set to $9800.33
+2026-04-27 17:17:57,112 [INFO] __main__: Initializing position tracker...
+2026-04-27 17:17:57,113 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:17:57,114 [INFO] __main__: Initializing signal generator...
+2026-04-27 17:17:57,114 [INFO] __main__: Initializing order executor...
+2026-04-27 17:17:57,117 [INFO] __main__: Recovered state from 2026-04-27T16:57:54.725109
+2026-04-27 17:17:57,118 [INFO] __main__: ============================================================
+2026-04-27 17:17:57,118 [INFO] __main__: SYSTEM STATE
+2026-04-27 17:17:57,119 [INFO] __main__: ============================================================
+2026-04-27 17:17:57,119 [INFO] __main__: Account: 198256073
+2026-04-27 17:17:57,119 [INFO] __main__:   Equity: $9,800.33
+2026-04-27 17:17:57,120 [INFO] __main__:   Margin Used: $0.00
+2026-04-27 17:17:57,120 [INFO] __main__:   Margin Free: $9,800.33
+2026-04-27 17:17:57,120 [INFO] __main__:   Leverage: 2000x
+2026-04-27 17:17:57,121 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:17:57,121 [INFO] __main__: Positions: 0 open
+2026-04-27 17:17:57,122 [INFO] __main__:   Gross Exposure: $0.00
+2026-04-27 17:17:57,122 [INFO] __main__:   Net Exposure: $0.00
+2026-04-27 17:17:57,122 [INFO] __main__:   Leverage Ratio: 0.00x
+2026-04-27 17:17:57,123 [INFO] __main__: HMM: 7 regimes
+2026-04-27 17:17:57,123 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:17:57,124 [INFO] __main__: Circuit Breaker Status: CircuitBreakerType.NONE
+2026-04-27 17:17:57,124 [INFO] __main__:   Daily Drawdown: +0.00%
+2026-04-27 17:17:57,124 [INFO] __main__:   Weekly Drawdown: +0.00%
+2026-04-27 17:17:57,125 [INFO] __main__:   Peak Drawdown: +0.00%
+2026-04-27 17:17:57,125 [INFO] __main__: ============================================================
+2026-04-27 17:17:57,125 [INFO] __main__: [OK] System online. Starting main loop...
+2026-04-27 17:17:57,125 [INFO] __main__: Main loop started
+2026-04-27 17:17:57,145 [WARNING] data.market_data: No live data for USTEC
+2026-04-27 17:17:57,146 [WARNING] __main__: Insufficient data for USTEC
+2026-04-27 17:19:35,964 [INFO] __main__: Shutdown signal received (2)
+2026-04-27 17:19:36,196 [INFO] __main__: ============================================================
+2026-04-27 17:19:36,196 [INFO] __main__: TRADING SYSTEM SHUTDOWN
+2026-04-27 17:19:36,197 [INFO] __main__: ============================================================
+2026-04-27 17:19:36,198 [INFO] __main__: ============================================================
+2026-04-27 17:19:36,199 [INFO] __main__: SESSION SUMMARY
+2026-04-27 17:19:36,199 [INFO] __main__: ============================================================
+2026-04-27 17:19:36,199 [INFO] __main__: Start Time: 2026-04-27T16:57:54.725109
+2026-04-27 17:19:36,199 [INFO] __main__: End Time: 2026-04-27T17:19:36.199927
+2026-04-27 17:19:36,200 [INFO] __main__: Bars Processed: 1
+2026-04-27 17:19:36,200 [INFO] __main__: Signals Generated: 0
+2026-04-27 17:19:36,200 [INFO] __main__: Signals Rejected: 0
+2026-04-27 17:19:36,200 [INFO] __main__: Orders Submitted: 0
+2026-04-27 17:19:36,201 [INFO] __main__: HMM Retrains: 0
+2026-04-27 17:19:36,201 [INFO] __main__: Final Positions: 0 open
+2026-04-27 17:19:36,201 [INFO] __main__: Total P&L: $0.00
+2026-04-27 17:19:36,201 [INFO] __main__: ============================================================
+2026-04-27 17:19:36,202 [INFO] broker.alpaca_client: MT5 shutdown complete
+2026-04-27 17:19:36,202 [INFO] __main__: MT5 connection closed
+2026-04-27 17:19:36,202 [INFO] __main__: [OK] Shutdown complete
+2026-04-27 17:19:43,249 [WARNING] __main__: Config file not found: config/settings.yaml
+2026-04-27 17:19:43,250 [INFO] __main__: ============================================================
+2026-04-27 17:19:43,250 [INFO] __main__: TRADING SYSTEM STARTUP
+2026-04-27 17:19:43,250 [INFO] __main__: ============================================================
+2026-04-27 17:19:43,251 [INFO] __main__: Connecting to MetaTrader5 (Exness)...
+2026-04-27 17:19:43,279 [INFO] broker.alpaca_client: MT5 initialized successfully
+2026-04-27 17:19:43,280 [INFO] broker.alpaca_client: [OK] Logged in to Exness-MT5Trial11 account 198256073
+2026-04-27 17:19:43,280 [INFO] __main__: [OK] Account: 198256073
+2026-04-27 17:19:43,280 [INFO] __main__:    Equity: $9,800.33
+2026-04-27 17:19:43,281 [INFO] __main__:    Balance: $9,800.33
+2026-04-27 17:19:43,281 [INFO] __main__:    Leverage: 2000x
+2026-04-27 17:19:43,281 [INFO] broker.alpaca_client: Account: 198256073, Equity: $9,800.33
+2026-04-27 17:19:43,281 [WARNING] broker.alpaca_client: Symbol USTEC not found. Trying alternatives...
+2026-04-27 17:19:43,282 [INFO] broker.alpaca_client: [OK] USTECm available
+2026-04-27 17:19:43,282 [INFO] __main__: Market closed for the day. Next open: 09:30 ET
+2026-04-27 17:19:43,282 [WARNING] __main__: Market is closed. Would exit in production.
+2026-04-27 17:19:43,282 [INFO] __main__: Initializing market data client...
+2026-04-27 17:19:43,283 [INFO] __main__: Initializing feature engineer...
+2026-04-27 17:19:43,283 [INFO] __main__: Checking HMM model...
+2026-04-27 17:19:43,284 [INFO] __main__: No HMM model found. Training new model...
+2026-04-27 17:19:43,284 [INFO] __main__: Training HMM model...
+2026-04-27 17:19:43,308 [INFO] __main__: HMM retrain input bars: 1081
+2026-04-27 17:19:43,416 [INFO] __main__: HMM retrain features: (631, 13)
+2026-04-27 17:19:45,688 [INFO] core.hmm_engine: HMM candidate n_components=3 log_likelihood=-1.594152 bic=2539.693121 converged=True iterations=11
+2026-04-27 17:19:45,998 [INFO] core.hmm_engine: HMM candidate n_components=4 log_likelihood=-0.091153 bic=2362.772146 converged=True iterations=10
+2026-04-27 17:19:46,426 [INFO] core.hmm_engine: HMM candidate n_components=5 log_likelihood=1.921015 bic=1929.229147 converged=True iterations=12
+2026-04-27 17:19:46,895 [INFO] core.hmm_engine: HMM candidate n_components=6 log_likelihood=2.805642 bic=2063.967228 converged=True iterations=13
+2026-04-27 17:19:47,382 [INFO] core.hmm_engine: HMM candidate n_components=7 log_likelihood=4.748813 bic=1665.199348 converged=True iterations=13
+2026-04-27 17:19:47,382 [INFO] core.hmm_engine: HMM candidate BIC scores: {3: 2539.6931214986025, 4: 2362.772146156857, 5: 1929.229147059922, 6: 2063.967228374935, 7: 1665.1993481303643}
+2026-04-27 17:19:47,383 [INFO] core.hmm_engine: Selected HMM model n_components=7 bic=1665.199348 log_likelihood=4.748813 converged=True iterations=13
+2026-04-27 17:19:47,903 [WARNING] core.hmm_engine: Regime change confirmed: 4 -> 3
+2026-04-27 17:19:47,903 [INFO] core.hmm_engine: Regime 3 confirmed after persistence window.
+2026-04-27 17:19:47,905 [WARNING] core.hmm_engine: Regime change confirmed: 3 -> 5
+2026-04-27 17:19:47,905 [INFO] core.hmm_engine: Regime 5 confirmed after persistence window.
+2026-04-27 17:19:47,905 [WARNING] core.hmm_engine: Regime change confirmed: 5 -> 6
+2026-04-27 17:19:47,905 [INFO] core.hmm_engine: Regime 6 confirmed after persistence window.
+2026-04-27 17:19:47,906 [WARNING] core.hmm_engine: Regime change confirmed: 6 -> 0
+2026-04-27 17:19:47,906 [INFO] core.hmm_engine: Regime 0 confirmed after persistence window.
+2026-04-27 17:19:47,906 [WARNING] core.hmm_engine: Regime change confirmed: 0 -> 1
+2026-04-27 17:19:47,907 [INFO] core.hmm_engine: Regime 1 confirmed after persistence window.
+2026-04-27 17:19:47,907 [WARNING] core.hmm_engine: Regime change confirmed: 1 -> 0
+2026-04-27 17:19:47,908 [INFO] core.hmm_engine: Regime 0 confirmed after persistence window.
+2026-04-27 17:19:47,908 [WARNING] core.hmm_engine: Regime change confirmed: 0 -> 1
+2026-04-27 17:19:47,908 [INFO] core.hmm_engine: Regime 1 confirmed after persistence window.
+2026-04-27 17:19:47,908 [WARNING] core.hmm_engine: Regime change confirmed: 1 -> 2
+2026-04-27 17:19:47,909 [INFO] core.hmm_engine: Regime 2 confirmed after persistence window.
+2026-04-27 17:19:47,909 [WARNING] core.hmm_engine: Regime change confirmed: 2 -> 1
+2026-04-27 17:19:47,909 [INFO] core.hmm_engine: Regime 1 confirmed after persistence window.
+2026-04-27 17:19:47,910 [WARNING] core.hmm_engine: Regime change confirmed: 1 -> 2
+2026-04-27 17:19:47,910 [INFO] core.hmm_engine: Regime 2 confirmed after persistence window.
+2026-04-27 17:19:47,910 [WARNING] core.hmm_engine: Regime change confirmed: 2 -> 5
+2026-04-27 17:19:47,911 [INFO] core.hmm_engine: Regime 5 confirmed after persistence window.
+2026-04-27 17:19:47,917 [INFO] __main__: [OK] HMM model trained and saved
+2026-04-27 17:19:47,918 [INFO] __main__: Initializing risk manager...
+2026-04-27 17:19:47,929 [INFO] core.risk_manager: Loaded risk config from c:\Users\USER\Desktop\Trading\regime-trader\config\settings.yaml
+2026-04-27 17:19:47,929 [INFO] core.risk_manager: [OK] Circuit breaker baseline set to $9800.33
+2026-04-27 17:19:47,930 [INFO] __main__: Initializing position tracker...
+2026-04-27 17:19:47,930 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:19:47,930 [INFO] __main__: Initializing signal generator...
+2026-04-27 17:19:47,931 [INFO] __main__: Initializing order executor...
+2026-04-27 17:19:47,932 [INFO] __main__: Recovered state from 2026-04-27T16:57:54.725109
+2026-04-27 17:19:47,932 [INFO] __main__: ============================================================
+2026-04-27 17:19:47,932 [INFO] __main__: SYSTEM STATE
+2026-04-27 17:19:47,932 [INFO] __main__: ============================================================
+2026-04-27 17:19:47,933 [INFO] __main__: Account: 198256073
+2026-04-27 17:19:47,933 [INFO] __main__:   Equity: $9,800.33
+2026-04-27 17:19:47,933 [INFO] __main__:   Margin Used: $0.00
+2026-04-27 17:19:47,933 [INFO] __main__:   Margin Free: $9,800.33
+2026-04-27 17:19:47,934 [INFO] __main__:   Leverage: 2000x
+2026-04-27 17:19:47,934 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:19:47,934 [INFO] __main__: Positions: 0 open
+2026-04-27 17:19:47,934 [INFO] __main__:   Gross Exposure: $0.00
+2026-04-27 17:19:47,935 [INFO] __main__:   Net Exposure: $0.00
+2026-04-27 17:19:47,935 [INFO] __main__:   Leverage Ratio: 0.00x
+2026-04-27 17:19:47,935 [INFO] __main__: HMM: 7 regimes
+2026-04-27 17:19:47,935 [INFO] broker.position_tracker: No open positions
+2026-04-27 17:19:47,936 [INFO] __main__: Circuit Breaker Status: CircuitBreakerType.NONE
+2026-04-27 17:19:47,936 [INFO] __main__:   Daily Drawdown: +0.00%
+2026-04-27 17:19:47,936 [INFO] __main__:   Weekly Drawdown: +0.00%
+2026-04-27 17:19:47,936 [INFO] __main__:   Peak Drawdown: +0.00%
+2026-04-27 17:19:47,937 [INFO] __main__: ============================================================
+2026-04-27 17:19:47,937 [INFO] __main__: [OK] System online. Starting main loop...
+2026-04-27 17:19:47,937 [INFO] __main__: Main loop started
+2026-04-27 17:19:47,953 [WARNING] data.market_data: No live data for USTEC
+2026-04-27 17:19:47,954 [WARNING] __main__: Insufficient data for USTEC
+2026-04-27 17:20:00,976 [WARNING] data.market_data: No live data for USTEC
+2026-04-27 17:20:00,977 [WARNING] __main__: Insufficient data for USTEC

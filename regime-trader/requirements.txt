@@ -1,0 +1,12 @@
+MetaTrader5
+pandas
+numpy
+scipy
+hmmlearn
+ta
+scikit-learn
+pyyaml
+python-dotenv
+schedule
+rich
+requests
