@@ -1,0 +1,4 @@
+timestamp,date,direction,entry_price,stop_loss,take_profit,sl_distance,rr_calculated,hh_level,ll_level,sweep_direction,sweep_price,sweep_bar_time,pvc_zona_high,pvc_zona_low,pvc_vela_a_time,pvc_vela_b_time,fib_ratio,trader_action,trader_notes,actual_result,actual_pnl
+2026-05-13T10:35:56.795667,2026-05-13,LONG,49584.5,49533.4,49838.6,51.1,4.9726,49838.6,49641.3,BUY,49538.2,2026-05-13 15:30:00,49581.5,49538.2,2026-05-13 15:20:00,2026-05-13 15:25:00,2026-05-13 15:30:00,0.855859,,,,
+2026-05-13T14:00:52.232672,2026-05-13,NO_SETUP,,,,,,,,,,,,,,,,,NO_SETUP,No se detecto setup valido en la sesion,,
+2026-05-13T14:01:01.854893,2026-05-13,NO_SETUP,,,,,,,,,,,,,,,,,NO_SETUP,No se detecto setup valido en la sesion,,

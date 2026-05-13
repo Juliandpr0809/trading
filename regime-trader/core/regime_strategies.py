@@ -57,6 +57,7 @@ class StrategyConfig:
     pullback_lookback: int = 5          # candles to check for pullback
     swing_lookback: int = 20            # swing high/low window
     exhaustion_atr_threshold: float = 2.0
+    min_sl_atr_multiplier: float = 1.5  # minimum SL distance in multiples of ATR
     rr_ratio: float = 2.0              # reward-to-risk for TP
     chop_labels: tuple[str, ...] = (
         "CHOP", "NEUTRAL", "WEAK_BEAR", "WEAK_BULL",
@@ -124,11 +125,16 @@ def detect_pullback(
     For SHORT: at least one bar's high touched or rose above EMA9 or VWAP.
     """
     if len(df) < lookback + 1:
+        LOGGER.debug("detect_pullback: insufficient bars (%d < %d)", len(df), lookback + 1)
         return False
 
     recent = df.iloc[-(lookback + 1):-1]  # exclude the trigger candle
 
     if "ema_9" not in recent.columns or "vwap" not in recent.columns:
+        LOGGER.warning(
+            "detect_pullback: missing columns. Available: %s",
+            recent.columns.tolist(),
+        )
         return False
 
     if direction == Direction.LONG:
@@ -266,6 +272,23 @@ class RegimeStrategy:
             if trigger and pullback:
                 direction = Direction.LONG
                 stop_loss = setup.swing_low
+
+                # Enforce minimum SL based on ATR to avoid noise-induced stops
+                try:
+                    min_sl_distance = setup.atr_14 * self.config.min_sl_atr_multiplier
+                    current_sl_distance = abs(setup.price - stop_loss)
+                    if current_sl_distance < min_sl_distance:
+                        stop_loss = setup.price - min_sl_distance
+                        LOGGER.debug(
+                            "SL ajustado por ATR mínimo: swing_dist=%.1f < atr_min=%.1f, nuevo SL=%.2f",
+                            current_sl_distance,
+                            min_sl_distance,
+                            stop_loss,
+                        )
+                except Exception:
+                    # If ATR not available, fall back to swing-based SL
+                    pass
+
                 rr_dist = abs(setup.price - stop_loss) * self.config.rr_ratio
                 take_profit = setup.price + rr_dist
                 reason = (
@@ -292,6 +315,22 @@ class RegimeStrategy:
             if trigger and pullback:
                 direction = Direction.SHORT
                 stop_loss = setup.swing_high
+
+                # Enforce minimum SL based on ATR to avoid noise-induced stops
+                try:
+                    min_sl_distance = setup.atr_14 * self.config.min_sl_atr_multiplier
+                    current_sl_distance = abs(stop_loss - setup.price)
+                    if current_sl_distance < min_sl_distance:
+                        stop_loss = setup.price + min_sl_distance
+                        LOGGER.debug(
+                            "SL ajustado por ATR mínimo: swing_dist=%.1f < atr_min=%.1f, nuevo SL=%.2f",
+                            current_sl_distance,
+                            min_sl_distance,
+                            stop_loss,
+                        )
+                except Exception:
+                    pass
+
                 rr_dist = abs(stop_loss - setup.price) * self.config.rr_ratio
                 take_profit = setup.price - rr_dist
                 reason = (

@@ -1,0 +1,275 @@
+2026-04-30 21:49:49,275 [INFO] __main__: Starting walk-forward backtest…
+2026-04-30 21:49:49,371 [INFO] __main__: Loaded 50000 bars from data/feeds/USTEC_M5.csv
+2026-04-30 21:49:49,372 [INFO] __main__: Resampling M5 data to H1...
+2026-04-30 21:49:49,387 [INFO] __main__: Resampled to H1: 4173 bars
+2026-04-30 21:49:51,643 [INFO] core.hmm_engine: HMM n=2  LL=-8.9178  BIC=14760.3509  converged=True  iters=15
+2026-04-30 21:49:52,000 [INFO] core.hmm_engine: HMM n=3  LL=-7.6913  BIC=13615.6857  converged=True  iters=14
+2026-04-30 21:49:52,415 [INFO] core.hmm_engine: HMM n=4  LL=-6.7559  BIC=12907.5992  converged=True  iters=16
+2026-04-30 21:49:52,425 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=12907.5992  converged=True
+2026-04-30 21:49:54,302 [INFO] backtest.backtester: OOS simulation: 240 bars, 990 features, 990 regime states precomputed
+2026-04-30 21:49:54,302 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:49:54,413 [INFO] backtest.backtester: FIRST TRADE: price=25697.71 SL=26085.20 TP=24922.73 swing_high=26085.20 swing_low=25555.97
+2026-04-30 21:49:54,414 [INFO] backtest.backtester: TRADE OPEN: SHORT @ 25697.43 | SL=26085.20 (dist=387.8 pts) | TP=24922.73 (dist=774.7 pts) | ATR=90.5 | RR=2.00
+2026-04-30 21:49:54,506 [INFO] backtest.backtester: TRADE OPEN: LONG @ 25646.25 | SL=25201.47 (dist=444.8 pts) | TP=26537.25 (dist=891.0 pts) | ATR=71.7 | RR=2.00
+2026-04-30 21:49:54,529 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:49:54,529 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:49:54,529 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:49:54,530 [INFO] backtest.backtester:   Blocked (in trade):    5
+2026-04-30 21:49:54,530 [INFO] backtest.backtester:   CHOP filtered:        175 (72.9%)
+2026-04-30 21:49:54,530 [INFO] backtest.backtester:   No macro alignment:   14
+2026-04-30 21:49:54,530 [INFO] backtest.backtester:   Exhaustion filtered:  44
+2026-04-30 21:49:54,530 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:49:54,531 [INFO] backtest.backtester:   LONG signals:         3
+2026-04-30 21:49:54,531 [INFO] backtest.backtester:   SHORT signals:        4
+2026-04-30 21:49:54,531 [INFO] backtest.backtester:   Blocked (in trade):    5
+2026-04-30 21:49:54,531 [INFO] backtest.backtester: Completed walk-forward window 0: IS [240:1200], OOS [1200:1440]
+2026-04-30 21:49:54,855 [INFO] core.hmm_engine: HMM n=2  LL=-8.5464  BIC=14203.1443  converged=True  iters=17
+2026-04-30 21:49:55,181 [INFO] core.hmm_engine: HMM n=3  LL=-7.4987  BIC=13326.7773  converged=True  iters=28
+2026-04-30 21:49:55,547 [INFO] core.hmm_engine: HMM n=4  LL=-6.5279  BIC=12565.6960  converged=True  iters=13
+2026-04-30 21:49:55,547 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=12565.6960  converged=True
+2026-04-30 21:49:57,778 [INFO] backtest.backtester: OOS simulation: 240 bars, 1230 features, 1230 regime states precomputed
+2026-04-30 21:49:57,778 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:49:57,933 [INFO] backtest.backtester: FIRST TRADE: price=25014.65 SL=25162.36 TP=24719.23 swing_high=25162.36 swing_low=24463.64
+2026-04-30 21:49:57,933 [INFO] backtest.backtester: TRADE OPEN: SHORT @ 25014.99 | SL=25162.36 (dist=147.4 pts) | TP=24719.23 (dist=295.8 pts) | ATR=97.7 | RR=2.01
+2026-04-30 21:49:57,937 [INFO] backtest.backtester: TRADE OPEN: LONG @ 25232.22 | SL=24463.64 (dist=768.6 pts) | TP=26767.34 (dist=1535.1 pts) | ATR=78.0 | RR=2.00
+2026-04-30 21:49:58,016 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:49:58,016 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:49:58,016 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:49:58,016 [INFO] backtest.backtester:   Blocked (in trade):    1
+2026-04-30 21:49:58,016 [INFO] backtest.backtester:   CHOP filtered:        199 (82.9%)
+2026-04-30 21:49:58,016 [INFO] backtest.backtester:   No macro alignment:   11
+2026-04-30 21:49:58,016 [INFO] backtest.backtester:   Exhaustion filtered:  26
+2026-04-30 21:49:58,016 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:49:58,016 [INFO] backtest.backtester:   LONG signals:         2
+2026-04-30 21:49:58,016 [INFO] backtest.backtester:   SHORT signals:        2
+2026-04-30 21:49:58,016 [INFO] backtest.backtester:   Blocked (in trade):    1
+2026-04-30 21:49:58,017 [INFO] backtest.backtester: Completed walk-forward window 1: IS [480:1440], OOS [1440:1680]
+2026-04-30 21:49:58,269 [INFO] core.hmm_engine: HMM n=2  LL=-9.4903  BIC=15619.0094  converged=True  iters=12
+2026-04-30 21:49:58,587 [INFO] core.hmm_engine: HMM n=3  LL=-8.2731  BIC=14488.3493  converged=True  iters=16
+2026-04-30 21:49:59,003 [INFO] core.hmm_engine: HMM n=4  LL=-7.2815  BIC=13696.0364  converged=True  iters=12
+2026-04-30 21:49:59,003 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=13696.0364  converged=True
+2026-04-30 21:50:01,561 [INFO] backtest.backtester: OOS simulation: 240 bars, 1470 features, 1470 regime states precomputed
+2026-04-30 21:50:01,561 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:50:01,775 [INFO] backtest.backtester: FIRST TRADE: price=25659.29 SL=25535.35 TP=25907.17 swing_high=25753.02 swing_low=25535.35
+2026-04-30 21:50:01,775 [INFO] backtest.backtester: TRADE OPEN: LONG @ 25658.85 | SL=25535.35 (dist=123.5 pts) | TP=25907.17 (dist=248.3 pts) | ATR=60.2 | RR=2.01
+2026-04-30 21:50:01,789 [INFO] backtest.backtester: TRADE OPEN: LONG @ 25619.06 | SL=25399.04 (dist=220.0 pts) | TP=26059.10 (dist=440.0 pts) | ATR=86.6 | RR=2.00
+2026-04-30 21:50:01,790 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:50:01,790 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:50:01,790 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:50:01,790 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:01,790 [INFO] backtest.backtester:   CHOP filtered:        203 (84.6%)
+2026-04-30 21:50:01,790 [INFO] backtest.backtester:   No macro alignment:   11
+2026-04-30 21:50:01,790 [INFO] backtest.backtester:   Exhaustion filtered:  24
+2026-04-30 21:50:01,790 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:50:01,790 [INFO] backtest.backtester:   LONG signals:         2
+2026-04-30 21:50:01,790 [INFO] backtest.backtester:   SHORT signals:        0
+2026-04-30 21:50:01,790 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:01,791 [INFO] backtest.backtester: Completed walk-forward window 2: IS [720:1680], OOS [1680:1920]
+2026-04-30 21:50:02,085 [INFO] core.hmm_engine: HMM n=2  LL=-8.3937  BIC=13974.1158  converged=True  iters=13
+2026-04-30 21:50:02,384 [INFO] core.hmm_engine: HMM n=3  LL=-6.6271  BIC=12019.4092  converged=True  iters=16
+2026-04-30 21:50:02,898 [INFO] core.hmm_engine: HMM n=4  LL=-5.6419  BIC=11236.6554  converged=True  iters=17
+2026-04-30 21:50:02,899 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=11236.6554  converged=True
+2026-04-30 21:50:05,624 [INFO] backtest.backtester: OOS simulation: 240 bars, 1710 features, 1710 regime states precomputed
+2026-04-30 21:50:05,625 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:50:05,633 [INFO] backtest.backtester: FIRST TRADE: price=25609.44 SL=25399.04 TP=26030.24 swing_high=25878.24 swing_low=25399.04
+2026-04-30 21:50:05,634 [INFO] backtest.backtester: TRADE OPEN: LONG @ 25608.99 | SL=25399.04 (dist=210.0 pts) | TP=26030.24 (dist=421.2 pts) | ATR=100.2 | RR=2.01
+2026-04-30 21:50:05,858 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:50:05,858 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:50:05,858 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:50:05,858 [INFO] backtest.backtester:   Blocked (in trade):    1
+2026-04-30 21:50:05,858 [INFO] backtest.backtester:   CHOP filtered:        169 (70.4%)
+2026-04-30 21:50:05,858 [INFO] backtest.backtester:   No macro alignment:   5
+2026-04-30 21:50:05,859 [INFO] backtest.backtester:   Exhaustion filtered:  64
+2026-04-30 21:50:05,859 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:50:05,859 [INFO] backtest.backtester:   LONG signals:         2
+2026-04-30 21:50:05,859 [INFO] backtest.backtester:   SHORT signals:        0
+2026-04-30 21:50:05,859 [INFO] backtest.backtester:   Blocked (in trade):    1
+2026-04-30 21:50:05,860 [INFO] backtest.backtester: Completed walk-forward window 3: IS [960:1920], OOS [1920:2160]
+2026-04-30 21:50:06,179 [INFO] core.hmm_engine: HMM n=2  LL=-8.0745  BIC=13495.2879  converged=True  iters=15
+2026-04-30 21:50:06,542 [INFO] core.hmm_engine: HMM n=3  LL=-6.7496  BIC=12203.0747  converged=True  iters=19
+2026-04-30 21:50:07,118 [INFO] core.hmm_engine: HMM n=4  LL=-5.8873  BIC=11604.6977  converged=True  iters=34
+2026-04-30 21:50:07,118 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=11604.6977  converged=True
+2026-04-30 21:50:10,100 [INFO] backtest.backtester: OOS simulation: 240 bars, 1950 features, 1950 regime states precomputed
+2026-04-30 21:50:10,100 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:50:10,129 [INFO] backtest.backtester: FIRST TRADE: price=25566.16 SL=25463.29 TP=25771.90 swing_high=25637.03 swing_low=25463.29
+2026-04-30 21:50:10,129 [INFO] backtest.backtester: TRADE OPEN: LONG @ 25566.41 | SL=25463.29 (dist=103.1 pts) | TP=25771.90 (dist=205.5 pts) | ATR=52.9 | RR=1.99
+2026-04-30 21:50:10,182 [INFO] backtest.backtester: TRADE OPEN: LONG @ 25560.88 | SL=25255.64 (dist=305.2 pts) | TP=26172.44 (dist=611.6 pts) | ATR=44.1 | RR=2.00
+2026-04-30 21:50:10,278 [INFO] backtest.backtester: TRADE OPEN: LONG @ 25530.33 | SL=25411.54 (dist=118.8 pts) | TP=25767.91 (dist=237.6 pts) | ATR=75.3 | RR=2.00
+2026-04-30 21:50:10,310 [INFO] backtest.backtester: TRADE OPEN: LONG @ 25608.82 | SL=25459.94 (dist=148.9 pts) | TP=25906.64 (dist=297.8 pts) | ATR=56.9 | RR=2.00
+2026-04-30 21:50:10,328 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:50:10,328 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:50:10,328 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:50:10,328 [INFO] backtest.backtester:   Blocked (in trade):    4
+2026-04-30 21:50:10,328 [INFO] backtest.backtester:   CHOP filtered:        190 (79.2%)
+2026-04-30 21:50:10,329 [INFO] backtest.backtester:   No macro alignment:   23
+2026-04-30 21:50:10,329 [INFO] backtest.backtester:   Exhaustion filtered:  19
+2026-04-30 21:50:10,329 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:50:10,329 [INFO] backtest.backtester:   LONG signals:         8
+2026-04-30 21:50:10,329 [INFO] backtest.backtester:   SHORT signals:        0
+2026-04-30 21:50:10,329 [INFO] backtest.backtester:   Blocked (in trade):    4
+2026-04-30 21:50:10,329 [INFO] backtest.backtester: Completed walk-forward window 4: IS [1200:2160], OOS [2160:2400]
+2026-04-30 21:50:10,558 [INFO] core.hmm_engine: HMM n=2  LL=-6.9901  BIC=11868.7709  converged=True  iters=8
+2026-04-30 21:50:10,963 [INFO] core.hmm_engine: HMM n=3  LL=-5.6644  BIC=10575.2685  converged=True  iters=36
+2026-04-30 21:50:11,502 [INFO] core.hmm_engine: HMM n=4  LL=-4.8473  BIC=10044.7634  converged=True  iters=50
+2026-04-30 21:50:11,503 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=10044.7634  converged=True
+2026-04-30 21:50:15,112 [INFO] backtest.backtester: OOS simulation: 240 bars, 2190 features, 2190 regime states precomputed
+2026-04-30 21:50:15,112 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:50:15,374 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:50:15,375 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:50:15,375 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:50:15,375 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:15,375 [INFO] backtest.backtester:   CHOP filtered:        240 (100.0%)
+2026-04-30 21:50:15,375 [INFO] backtest.backtester:   No macro alignment:   0
+2026-04-30 21:50:15,375 [INFO] backtest.backtester:   Exhaustion filtered:  0
+2026-04-30 21:50:15,376 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:50:15,376 [INFO] backtest.backtester:   LONG signals:         0
+2026-04-30 21:50:15,376 [INFO] backtest.backtester:   SHORT signals:        0
+2026-04-30 21:50:15,376 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:15,378 [INFO] backtest.backtester: Completed walk-forward window 5: IS [1440:2400], OOS [2400:2640]
+2026-04-30 21:50:15,668 [INFO] core.hmm_engine: HMM n=2  LL=-9.1231  BIC=15068.3030  converged=True  iters=10
+2026-04-30 21:50:16,145 [INFO] core.hmm_engine: HMM n=3  LL=-7.9008  BIC=13929.8462  converged=True  iters=14
+2026-04-30 21:50:16,660 [INFO] core.hmm_engine: HMM n=4  LL=-6.9387  BIC=13181.7912  converged=True  iters=30
+2026-04-30 21:50:16,660 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=13181.7912  converged=True
+2026-04-30 21:50:20,358 [INFO] backtest.backtester: OOS simulation: 240 bars, 2430 features, 2430 regime states precomputed
+2026-04-30 21:50:20,358 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:50:20,593 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:50:20,593 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:50:20,593 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:50:20,593 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:20,593 [INFO] backtest.backtester:   CHOP filtered:        240 (100.0%)
+2026-04-30 21:50:20,593 [INFO] backtest.backtester:   No macro alignment:   0
+2026-04-30 21:50:20,593 [INFO] backtest.backtester:   Exhaustion filtered:  0
+2026-04-30 21:50:20,593 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:50:20,593 [INFO] backtest.backtester:   LONG signals:         0
+2026-04-30 21:50:20,593 [INFO] backtest.backtester:   SHORT signals:        0
+2026-04-30 21:50:20,593 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:20,594 [INFO] backtest.backtester: Completed walk-forward window 6: IS [1680:2640], OOS [2640:2880]
+2026-04-30 21:50:20,841 [INFO] core.hmm_engine: HMM n=2  LL=-8.5629  BIC=14227.9570  converged=True  iters=10
+2026-04-30 21:50:21,154 [INFO] core.hmm_engine: HMM n=3  LL=-7.1931  BIC=12868.4124  converged=True  iters=17
+2026-04-30 21:50:21,649 [INFO] core.hmm_engine: HMM n=4  LL=-6.0984  BIC=11921.4307  converged=True  iters=22
+2026-04-30 21:50:21,649 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=11921.4307  converged=True
+2026-04-30 21:50:25,435 [INFO] backtest.backtester: OOS simulation: 240 bars, 2670 features, 2670 regime states precomputed
+2026-04-30 21:50:25,435 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:50:25,662 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:50:25,662 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:50:25,662 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:50:25,662 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:25,662 [INFO] backtest.backtester:   CHOP filtered:        221 (92.1%)
+2026-04-30 21:50:25,662 [INFO] backtest.backtester:   No macro alignment:   10
+2026-04-30 21:50:25,662 [INFO] backtest.backtester:   Exhaustion filtered:  9
+2026-04-30 21:50:25,662 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:50:25,662 [INFO] backtest.backtester:   LONG signals:         0
+2026-04-30 21:50:25,663 [INFO] backtest.backtester:   SHORT signals:        0
+2026-04-30 21:50:25,663 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:25,664 [INFO] backtest.backtester: Completed walk-forward window 7: IS [1920:2880], OOS [2880:3120]
+2026-04-30 21:50:25,890 [INFO] core.hmm_engine: HMM n=2  LL=-8.5303  BIC=14179.0406  converged=True  iters=8
+2026-04-30 21:50:26,369 [INFO] core.hmm_engine: HMM n=3  LL=-7.1073  BIC=12739.7157  converged=True  iters=24
+2026-04-30 21:50:26,884 [INFO] core.hmm_engine: HMM n=4  LL=-6.3066  BIC=12233.6523  converged=True  iters=35
+2026-04-30 21:50:26,885 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=12233.6523  converged=True
+2026-04-30 21:50:30,988 [INFO] backtest.backtester: OOS simulation: 240 bars, 2910 features, 2910 regime states precomputed
+2026-04-30 21:50:30,988 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:50:31,119 [INFO] backtest.backtester: FIRST TRADE: price=25036.59 SL=24759.25 TP=25591.27 swing_high=25228.80 swing_low=24759.25
+2026-04-30 21:50:31,119 [INFO] backtest.backtester: TRADE OPEN: LONG @ 25036.26 | SL=24759.25 (dist=277.0 pts) | TP=25591.27 (dist=555.0 pts) | ATR=148.1 | RR=2.00
+2026-04-30 21:50:31,138 [INFO] backtest.backtester: TRADE OPEN: SHORT @ 24772.92 | SL=25125.95 (dist=353.0 pts) | TP=24065.72 (dist=707.2 pts) | ATR=118.2 | RR=2.00
+2026-04-30 21:50:31,219 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:50:31,219 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:50:31,219 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:50:31,219 [INFO] backtest.backtester:   Blocked (in trade):    4
+2026-04-30 21:50:31,219 [INFO] backtest.backtester:   CHOP filtered:        193 (80.4%)
+2026-04-30 21:50:31,219 [INFO] backtest.backtester:   No macro alignment:   9
+2026-04-30 21:50:31,219 [INFO] backtest.backtester:   Exhaustion filtered:  32
+2026-04-30 21:50:31,219 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:50:31,219 [INFO] backtest.backtester:   LONG signals:         1
+2026-04-30 21:50:31,219 [INFO] backtest.backtester:   SHORT signals:        5
+2026-04-30 21:50:31,219 [INFO] backtest.backtester:   Blocked (in trade):    4
+2026-04-30 21:50:31,220 [INFO] backtest.backtester: Completed walk-forward window 8: IS [2160:3120], OOS [3120:3360]
+2026-04-30 21:50:31,499 [INFO] core.hmm_engine: HMM n=2  LL=-8.6265  BIC=14323.3715  converged=True  iters=11
+2026-04-30 21:50:31,824 [INFO] core.hmm_engine: HMM n=3  LL=-7.4079  BIC=13190.5198  converged=True  iters=25
+2026-04-30 21:50:32,331 [INFO] core.hmm_engine: HMM n=4  LL=-6.3423  BIC=12287.2402  converged=True  iters=24
+2026-04-30 21:50:32,331 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=12287.2402  converged=True
+2026-04-30 21:50:36,604 [INFO] backtest.backtester: OOS simulation: 240 bars, 3150 features, 3150 regime states precomputed
+2026-04-30 21:50:36,605 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:50:36,836 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:50:36,836 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:50:36,836 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:50:36,836 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:36,836 [INFO] backtest.backtester:   CHOP filtered:        223 (92.9%)
+2026-04-30 21:50:36,836 [INFO] backtest.backtester:   No macro alignment:   1
+2026-04-30 21:50:36,836 [INFO] backtest.backtester:   Exhaustion filtered:  16
+2026-04-30 21:50:36,836 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:50:36,836 [INFO] backtest.backtester:   LONG signals:         0
+2026-04-30 21:50:36,837 [INFO] backtest.backtester:   SHORT signals:        0
+2026-04-30 21:50:36,837 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:36,838 [INFO] backtest.backtester: Completed walk-forward window 9: IS [2400:3360], OOS [3360:3600]
+2026-04-30 21:50:37,203 [INFO] core.hmm_engine: HMM n=2  LL=-8.7312  BIC=14480.4132  converged=True  iters=19
+2026-04-30 21:50:37,393 [INFO] core.hmm_engine: HMM n=3  LL=-7.4563  BIC=13263.1813  converged=True  iters=7
+2026-04-30 21:50:37,714 [INFO] core.hmm_engine: HMM n=4  LL=-6.4855  BIC=12502.0466  converged=True  iters=11
+2026-04-30 21:50:37,714 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=12502.0466  converged=True
+2026-04-30 21:50:42,259 [INFO] backtest.backtester: OOS simulation: 240 bars, 3390 features, 3390 regime states precomputed
+2026-04-30 21:50:42,259 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:50:42,484 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:50:42,485 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:50:42,485 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:50:42,485 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:42,485 [INFO] backtest.backtester:   CHOP filtered:        201 (83.8%)
+2026-04-30 21:50:42,485 [INFO] backtest.backtester:   No macro alignment:   0
+2026-04-30 21:50:42,485 [INFO] backtest.backtester:   Exhaustion filtered:  39
+2026-04-30 21:50:42,485 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:50:42,485 [INFO] backtest.backtester:   LONG signals:         0
+2026-04-30 21:50:42,485 [INFO] backtest.backtester:   SHORT signals:        0
+2026-04-30 21:50:42,485 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:42,486 [INFO] backtest.backtester: Completed walk-forward window 10: IS [2640:3600], OOS [3600:3840]
+2026-04-30 21:50:42,794 [INFO] core.hmm_engine: HMM n=2  LL=-9.4340  BIC=15534.6251  converged=True  iters=14
+2026-04-30 21:50:43,014 [INFO] core.hmm_engine: HMM n=3  LL=-8.3311  BIC=14575.3479  converged=True  iters=11
+2026-04-30 21:50:43,556 [INFO] core.hmm_engine: HMM n=4  LL=-7.2724  BIC=13682.4383  converged=True  iters=28
+2026-04-30 21:50:43,556 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=13682.4383  converged=True
+2026-04-30 21:50:48,376 [INFO] backtest.backtester: OOS simulation: 240 bars, 3630 features, 3630 regime states precomputed
+2026-04-30 21:50:48,376 [INFO] backtest.backtester: CONFIG CHECK: swing_lookback=8, rr_ratio=2.0, risk_pct=0.010
+2026-04-30 21:50:48,600 [INFO] backtest.backtester: Signal breakdown for OOS window:
+2026-04-30 21:50:48,600 [INFO] backtest.backtester:   Total bars evaluated: 240
+2026-04-30 21:50:48,600 [INFO] backtest.backtester:   Skipped/no regime:    0 (0.0%)
+2026-04-30 21:50:48,601 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:48,601 [INFO] backtest.backtester:   CHOP filtered:        158 (65.8%)
+2026-04-30 21:50:48,601 [INFO] backtest.backtester:   No macro alignment:   0
+2026-04-30 21:50:48,601 [INFO] backtest.backtester:   Exhaustion filtered:  82
+2026-04-30 21:50:48,601 [INFO] backtest.backtester:   No pullback:          0
+2026-04-30 21:50:48,601 [INFO] backtest.backtester:   LONG signals:         0
+2026-04-30 21:50:48,601 [INFO] backtest.backtester:   SHORT signals:        0
+2026-04-30 21:50:48,601 [INFO] backtest.backtester:   Blocked (in trade):    0
+2026-04-30 21:50:48,603 [INFO] backtest.backtester: Completed walk-forward window 11: IS [2880:3840], OOS [3840:4080]
+2026-04-30 21:50:48,604 [INFO] backtest.performance: EXIT REASON BREAKDOWN:
+2026-04-30 21:50:48,604 [INFO] backtest.performance:   TP hits:       3  (23.1%)
+2026-04-30 21:50:48,604 [INFO] backtest.performance:   SL hits:       7  (53.8%)
+2026-04-30 21:50:48,604 [INFO] backtest.performance:   Regime FLAT:   0  (0.0%)
+2026-04-30 21:50:48,604 [INFO] backtest.performance:   Avg hold bars: 16.0
+2026-04-30 21:50:48,604 [INFO] backtest.performance:   Avg Win  $:    1619.79
+2026-04-30 21:50:48,605 [INFO] backtest.performance:   Avg Loss $:    904.70
+2026-04-30 21:50:48,605 [INFO] backtest.performance:   RR achieved:   1.79
+2026-04-30 21:50:48,605 [INFO] backtest.performance: TRADE DEBUG [0]: dir=SHORT entry=25697.43 exit=24922.73 sl=26085.20 tp=24922.73 reason=TP_HIT pnl=1933.43
+2026-04-30 21:50:48,605 [INFO] backtest.performance: TRADE DEBUG [1]: dir=LONG entry=25646.25 exit=25625.43 sl=25201.47 tp=26537.25 reason=END_OF_WINDOW pnl=-106.38
+2026-04-30 21:50:48,605 [INFO] backtest.performance: TRADE DEBUG [2]: dir=SHORT entry=25014.99 exit=25162.36 sl=25162.36 tp=24719.23 reason=SL_HIT pnl=-1167.55
+2026-04-30 21:50:48,605 [INFO] backtest.performance: TRADE DEBUG [3]: dir=LONG entry=25232.22 exit=24463.64 sl=24463.64 tp=26767.34 reason=SL_HIT pnl=-1023.52
+2026-04-30 21:50:48,605 [INFO] backtest.performance: TRADE DEBUG [4]: dir=LONG entry=25658.85 exit=25535.35 sl=25535.35 tp=25907.17 reason=SL_HIT pnl=-1203.21
+2026-04-30 21:50:48,605 [INFO] backtest.performance:   TRUE RR (puntos): 0.00  (n=13 trades)
+2026-04-30 21:50:48,606 [INFO] __main__: DATA CHECK: bars=4173, date_start=2025-08-15 00:00:00, date_end=2026-05-01 02:00:00, close_min=22881.95, close_max=27542.52
+2026-04-30 21:50:48,606 [INFO] __main__: ============================================================
+2026-04-30 21:50:48,606 [INFO] __main__: BACKTEST RESULTS
+2026-04-30 21:50:48,606 [INFO] __main__: ============================================================
+2026-04-30 21:50:48,606 [INFO] __main__: Total Return: 0.00%
+2026-04-30 21:50:48,606 [INFO] __main__: Sharpe Ratio: 0.00
+2026-04-30 21:50:48,606 [INFO] __main__: Sortino Ratio: 0.00
+2026-04-30 21:50:48,606 [INFO] __main__: Calmar Ratio: 0.00
+2026-04-30 21:50:48,606 [INFO] __main__: Max Drawdown: 4.41%
+2026-04-30 21:50:48,606 [INFO] __main__: Win Rate: 3.7%
+2026-04-30 21:50:48,607 [INFO] __main__: Profit Factor: 1.01
+2026-04-30 21:50:48,607 [INFO] __main__: TRADE-LEVEL METRICS (DETALLADO)
+2026-04-30 21:50:48,607 [INFO] __main__: Total Trades (closed):  13
+2026-04-30 21:50:48,607 [INFO] __main__: Win Rate (por trade):   30.8%
+2026-04-30 21:50:48,607 [INFO] __main__: Profit Factor:          0.80
+2026-04-30 21:50:48,607 [INFO] __main__: RR Logrado:             1.79
+2026-04-30 21:50:48,607 [INFO] __main__: RR Diseñado:            2.00
+2026-04-30 21:50:48,607 [INFO] __main__: Expectancy/trade:       $-127.94
+2026-04-30 21:50:48,607 [INFO] __main__: Exits por TP:           3
+2026-04-30 21:50:48,607 [INFO] __main__: Exits por SL:           7
+2026-04-30 21:50:48,607 [INFO] __main__: Exits por Régimen FLAT: 0
+2026-04-30 21:50:48,607 [INFO] __main__: ============================================================

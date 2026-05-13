@@ -1,0 +1,6 @@
+2026-04-27 22:01:27,384 [INFO] __main__: Starting walk-forward backtest…
+2026-04-27 22:01:27,576 [INFO] __main__: Loaded 99000 bars from data/feeds/USTEC_M5.csv
+2026-04-27 22:01:31,449 [INFO] core.hmm_engine: HMM n=2  LL=-7.4717  BIC=131004.7249  converged=True  iters=15
+2026-04-27 22:01:34,724 [INFO] core.hmm_engine: HMM n=3  LL=-6.7103  BIC=118799.8698  converged=True  iters=34
+2026-04-27 22:01:36,607 [INFO] core.hmm_engine: HMM n=4  LL=-6.3890  BIC=114199.0719  converged=True  iters=14
+2026-04-27 22:01:36,608 [INFO] core.hmm_engine: Selected HMM: n_components=4  BIC=114199.0719  converged=True

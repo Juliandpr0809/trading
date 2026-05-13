@@ -156,9 +156,9 @@ class MT5Client:
                 return False
 
             LOGGER.info(
-                "Health: account=%s  equity=$%,.2f  leverage=%dx",
+                "Health: account=%s  equity=%s  leverage=%dx",
                 account_info.login,
-                account_info.equity,
+                f"${account_info.equity:,.2f}",
                 account_info.leverage,
             )
 

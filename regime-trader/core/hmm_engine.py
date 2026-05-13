@@ -55,6 +55,19 @@ class HMMConfig:
     min_train_bars: int = 504
     random_state: int = 42
 
+    def __post_init__(self) -> None:
+        self.n_components = [int(value) for value in self.n_components]
+        self.cv_tol = float(self.cv_tol)
+        self.cv_max_iter = int(self.cv_max_iter)
+        self.train_bars = int(self.train_bars)
+        self.stability_bars = int(self.stability_bars)
+        self.flicker_window = int(self.flicker_window)
+        self.flicker_threshold = int(self.flicker_threshold)
+        self.min_confidence = float(self.min_confidence)
+        self.retrain_interval_bars = int(self.retrain_interval_bars)
+        self.min_train_bars = int(self.min_train_bars)
+        self.random_state = int(self.random_state)
+
 
 @dataclass
 class RegimeInfo:
@@ -560,7 +573,7 @@ class HMMEngine:
 
                 if consec_count >= required:
                     # ── TRANSITION ACCEPTED ────────────────────
-                    LOGGER.info(
+                    LOGGER.debug(
                         "Regime change confirmed: %d -> %d  (after %d consecutive bars)",
                         locked_regime,
                         candidate,

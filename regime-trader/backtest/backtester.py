@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from bisect import bisect_right, insort
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -18,17 +19,25 @@ LOGGER = logging.getLogger(__name__)
 
 @dataclass
 class BacktestConfig:
-    """Configuration for walk-forward backtester."""
+    """Configuration for walk-forward backtester.
 
-    is_window: int = 504
-    oos_window: int = 126
-    step_size: int = 126
+    Default windows are calibrated for M5 bars:
+      - 1 trading day  = 288 M5 bars  (24h * 60min / 5min)
+      - is_window      = 14400 bars   (~50 trading days)
+      - oos_window     = 2880 bars    (~10 trading days)
+      - step_size      = 2880 bars    (~10 trading days)
+      - min_train_bars = 8640 bars    (~30 trading days)
+    """
+
+    is_window: int = 14400
+    oos_window: int = 2880
+    step_size: int = 2880
     slippage_pct: float = 0.0005
     rebalance_threshold: float = 0.10
     initial_capital: float = 100000.0
     commission_pct: float = 0.0
     fill_delay_bars: int = 1
-    min_train_bars: int = 630
+    min_train_bars: int = 8640
 
 
 @dataclass
@@ -63,6 +72,10 @@ class Trade:
     pnl: float
     pnl_pct: float
     holding_bars: int
+    exit_reason: str = ""
+    direction: str = ""
+    stop_loss: float = 0.0
+    take_profit: float = 0.0
 
 
 class BacktestResult:
@@ -127,13 +140,14 @@ class WalkForwardBacktester:
         self.hmm_config = hmm_config or HMMConfig(
             n_components=[2, 3, 4],
             cv_tol=1e-3,
-            cv_max_iter=100,
-            train_bars=126,
-            stability_bars=5,
-            flicker_window=40,
-            flicker_threshold=2,
-            min_confidence=0.95,
-            min_train_bars=60,
+            cv_max_iter=200,
+            train_bars=14400,        # Use the full IS window
+            stability_bars=12,       # 12 consecutive M5 bars = 1 hour
+            flicker_window=120,      # ~10 hours lookback
+            flicker_threshold=3,
+            min_confidence=0.90,
+            retrain_interval_bars=288,
+            min_train_bars=8640,     # ~30 trading days of M5
         )
         self.strategy_config = strategy_config or StrategyConfig()
 
@@ -233,45 +247,165 @@ class WalkForwardBacktester:
     ) -> None:
         """Simulate OOS period bar by bar with allocation tracking.
 
-        PERFORMANCE FIX: Features and indicators are computed ONCE for the
-        entire price_data range up to oos_end, then sliced per bar.
-        This reduces complexity from O(n^2) to O(n).
+        PERFORMANCE FIX v2: Features are computed ONCE. Regime states are
+        computed in a SINGLE forward-filter pass for the entire OOS window.
+        Per-bar work is O(1) lookups into precomputed arrays.
+        Total complexity: O(n) instead of O(n^2).
         """
         equity = self.backtest_config.initial_capital
         shares = 0.0
         cash = equity
-        pending_rebalance: dict[str, Any] | None = None
 
         oos_end_idx = oos_start_idx + len(oos_data)
 
-        # ── PRECOMPUTE ALL FEATURES AND INDICATORS ONCE ───────
+        # ── STEP 1: PRECOMPUTE ALL FEATURES ONCE ──────────────
         full_slice = price_data.iloc[:oos_end_idx]
         all_features = compute_observable_features(full_slice)
-
-        # Precompute technical indicators on full slice
-        from data.market_data import MarketDataClient
-        _mdc = MarketDataClient(data_source="csv")
-        full_with_indicators = _mdc.compute_technical_indicators(full_slice.copy())
 
         if all_features.empty:
             LOGGER.warning("Feature precomputation returned empty for OOS window")
             return
 
+        # ── STEP 2: PRECOMPUTE TECHNICAL INDICATORS ONCE ──────
+        from data.market_data import MarketDataClient
+        _mdc = MarketDataClient(data_source="csv")
+        full_with_indicators = _mdc.compute_technical_indicators(full_slice.copy())
+
+        required_cols = ["ema_9", "ema_200", "vwap", "atr", "high", "low", "close"]
+        missing_cols = [col for col in required_cols if col not in full_with_indicators.columns]
+        if missing_cols:
+            LOGGER.error(
+                "CRITICAL: Missing indicator columns: %s. Available: %s",
+                missing_cols,
+                full_with_indicators.columns.tolist(),
+            )
+            return
+
+        # ── STEP 2b: PRECOMPUTE ALL ROLLING VOLATILITY STDS ONCE ──
+        # This avoids O(n²) recomputation in the loop
+        all_rolling_stds = full_with_indicators["close"].rolling(20).std()
+        all_vol_percentiles = self._compute_causal_percentiles(all_rolling_stds)
+
+        # ── STEP 3: BATCH REGIME INFERENCE (SINGLE FORWARD PASS) ──
+        # Run the forward filter ONCE over ALL features and get every
+        # bar's regime state.  This replaces the per-bar call that was
+        # causing O(n^2) behaviour.
+        all_regime_states = hmm.predict_regime_series_filtered(all_features)
+        n_features = len(all_features)
+
+        # Map from full_slice index -> feature index offset
+        feat_offset = len(full_slice) - n_features
+
+        from core.regime_strategies import detect_pullback, Direction
+
+        signal_stats = {
+            "total_bars": 0,
+            "skipped_no_regime": 0,
+            "chop_filtered": 0,
+            "no_macro": 0,
+            "exhausted": 0,
+            "no_pullback": 0,
+            "long_signals": 0,
+            "short_signals": 0,
+            "blocked_active_trade": 0,
+        }
+
+        active_trade: dict[str, Any] | None = None
+
+        LOGGER.info(
+            "OOS simulation: %d bars, %d features, %d regime states precomputed",
+            len(oos_data), n_features, len(all_regime_states),
+        )
+
+        # CONFIG CHECK: Ensure strategy config values are flowing into simulator
+        try:
+            LOGGER.info(
+                "CONFIG CHECK: swing_lookback=%d, rr_ratio=%.1f, risk_pct=%.3f",
+                strategy.config.swing_lookback,
+                strategy.config.rr_ratio,
+                strategy.config.risk_percent,
+            )
+        except Exception:
+            LOGGER.warning("CONFIG CHECK: unable to read strategy.config values")
+
+        first_trade_logged = False
+
         for i, (bar_idx, row) in enumerate(oos_data.iterrows()):
             price = float(row["close"])
             full_idx = oos_start_idx + i
+            signal_stats["total_bars"] += 1
 
             if full_idx < 200:
                 continue
 
-            # Slice precomputed features up to current bar (O(1) view)
-            features_up_to_now = all_features.iloc[:full_idx + 1 - (len(full_slice) - len(all_features))]
-            if features_up_to_now.empty:
+            # Index into precomputed regime states
+            feat_idx = full_idx - feat_offset
+            if feat_idx < 0 or feat_idx >= len(all_regime_states):
                 continue
 
             try:
-                regime_state = hmm.predict_regime_filtered(features_up_to_now)
+                regime_state = all_regime_states[feat_idx]
                 regime_info = hmm.regime_info[regime_state.current_regime_id]
+
+                exit_triggered = False
+                exit_reason = ""
+                exit_price = price
+
+                if active_trade is not None:
+                    if active_trade["direction"] == "LONG":
+                        if price <= active_trade["stop_loss"]:
+                            exit_triggered = True
+                            exit_reason = "SL_HIT"
+                            exit_price = active_trade["stop_loss"]
+                        elif price >= active_trade["take_profit"]:
+                            exit_triggered = True
+                            exit_reason = "TP_HIT"
+                            exit_price = active_trade["take_profit"]
+                    else:
+                        if price >= active_trade["stop_loss"]:
+                            exit_triggered = True
+                            exit_reason = "SL_HIT"
+                            exit_price = active_trade["stop_loss"]
+                        elif price <= active_trade["take_profit"]:
+                            exit_triggered = True
+                            exit_reason = "TP_HIT"
+                            exit_price = active_trade["take_profit"]
+
+                    if exit_triggered:
+                        qty = float(active_trade["lots"])
+                        trade_direction = active_trade["direction"]
+                        entry_slippage = float(active_trade.get("entry_slippage", 0.0))
+                        exit_slippage = abs(qty * exit_price * self.backtest_config.slippage_pct)
+                        total_slippage = entry_slippage + exit_slippage
+
+                        if trade_direction == "LONG":
+                            cash += qty * exit_price - exit_slippage
+                            shares -= qty
+                            pnl = (exit_price - float(active_trade["entry_price"])) * qty - total_slippage
+                        else:
+                            cash -= qty * exit_price + exit_slippage
+                            shares += qty
+                            pnl = (float(active_trade["entry_price"]) - exit_price) * qty - total_slippage
+
+                        equity = cash + shares * price
+
+                        if result.trades:
+                            last_trade = result.trades[-1]
+                            last_trade.exit_price = exit_price
+                            last_trade.exit_bar = len(result.bars)
+                            last_trade.holding_bars = last_trade.exit_bar - last_trade.entry_bar
+                            last_trade.pnl = pnl
+                            last_trade.pnl_pct = pnl / (
+                                abs(float(active_trade["entry_price"]) * qty) + 1e-12
+                            )
+                            last_trade.exit_reason = exit_reason
+
+                        active_trade = None
+                        rebalanced = True
+                    else:
+                        rebalanced = False
+                else:
+                    rebalanced = False
 
                 # Read precomputed indicators at current bar
                 bar_data = full_with_indicators.iloc[full_idx]
@@ -284,13 +418,14 @@ class WalkForwardBacktester:
                 distance_from_ema200 = price - ema_200
 
                 # Check pullback from precomputed data
-                from core.regime_strategies import detect_pullback, Direction
                 lookback_df = full_with_indicators.iloc[max(0, full_idx - 6):full_idx + 1]
                 had_pullback = detect_pullback(
                     lookback_df,
                     Direction.LONG if price > ema_200 else Direction.SHORT,
                     lookback=5,
                 ) if len(lookback_df) > 5 else False
+
+                volatility_percentile = float(all_vol_percentiles.iloc[full_idx]) if full_idx < len(all_vol_percentiles) else 0.5
 
                 setup = TechnicalSetup(
                     price=price,
@@ -301,6 +436,7 @@ class WalkForwardBacktester:
                     swing_high=swing_high,
                     swing_low=swing_low,
                     distance_from_ema200=distance_from_ema200,
+                    volatility_percentile=volatility_percentile,
                     had_pullback=had_pullback,
                 )
 
@@ -312,77 +448,126 @@ class WalkForwardBacktester:
                     account_equity=equity,
                 )
 
-                target_allocation = 1.0 if signal.direction == "LONG" else (0.0 if signal.direction == "SHORT" else 0.0)
-                current_allocation = (shares * price) / (equity + 1e-12)
 
-                rebalanced = abs(target_allocation - current_allocation) > self.backtest_config.rebalance_threshold
 
-                if rebalanced and pending_rebalance is None:
-                    pending_rebalance = {
-                        "price": price,
-                        "target_allocation": target_allocation,
-                        "regime_id": regime_state.current_regime_id,
-                        "regime_name": regime_info.label,
-                        "regime_probability": regime_state.state_probability,
-                    }
+                reasoning = signal.reasoning.lower() if signal else ""
+                if signal is None:
+                    signal_stats["skipped_no_regime"] += 1
+                elif signal.direction == "LONG":
+                    signal_stats["long_signals"] += 1
+                elif signal.direction == "SHORT":
+                    signal_stats["short_signals"] += 1
+                elif "chop" in reasoning:
+                    signal_stats["chop_filtered"] += 1
+                elif "no clear macro" in reasoning or "macro" in reasoning:
+                    signal_stats["no_macro"] += 1
+                elif "exhaust" in reasoning:
+                    signal_stats["exhausted"] += 1
+                elif "pullback" in reasoning or "no trigger" in reasoning:
+                    signal_stats["no_pullback"] += 1
+                else:
+                    # Catch any signal that doesn't match above patterns
+                    LOGGER.warning(f"Unclassified signal at bar {full_idx}: dir={signal.direction if signal else 'None'}, reason={reasoning[:60]}")
+
+                if active_trade is not None and not exit_triggered and signal.direction not in ("FLAT", ""):
+                    signal_stats["blocked_active_trade"] += 1
+
+                if active_trade is None and not exit_triggered and signal.direction in ("LONG", "SHORT"):
+                    qty = float(signal.lots if hasattr(signal, "lots") else 1.0)
+                    if qty > 0:
+                        next_bar_idx = full_idx + 1
+                        if next_bar_idx < len(full_with_indicators):
+                            fill_price = float(full_with_indicators["open"].iloc[next_bar_idx])
+                        else:
+                            fill_price = price
+
+                        entry_slippage = abs(qty * fill_price * self.backtest_config.slippage_pct)
+                        
+                        # Fix 7: Log SL/TP distances for validation
+                        sl_distance = abs(fill_price - float(signal.stop_loss))
+                        tp_distance = abs(float(signal.take_profit) - fill_price)
+                        actual_rr = tp_distance / (sl_distance + 1e-12)
+                        # Log first trade details (explicit) for debugging config propagation
+                        try:
+                            if not first_trade_logged:
+                                LOGGER.info(
+                                    "FIRST TRADE: price=%.2f SL=%.2f TP=%.2f swing_high=%.2f swing_low=%.2f",
+                                    price,
+                                    float(signal.stop_loss),
+                                    float(signal.take_profit),
+                                    setup.swing_high,
+                                    setup.swing_low,
+                                )
+                                first_trade_logged = True
+                        except Exception:
+                            LOGGER.warning("FIRST TRADE: unable to log full setup details")
+
+                        LOGGER.info(
+                            "TRADE OPEN: %s @ %.2f | SL=%.2f (dist=%.1f pts) | TP=%.2f (dist=%.1f pts) | ATR=%.1f | RR=%.2f",
+                            signal.direction, fill_price,
+                            float(signal.stop_loss), sl_distance,
+                            float(signal.take_profit), tp_distance,
+                            setup.atr_14,
+                            actual_rr,
+                        )
+                        
+                        if signal.direction == "LONG":
+                            cash -= qty * fill_price + entry_slippage
+                            shares += qty
+                        else:
+                            cash += qty * fill_price - entry_slippage
+                            shares -= qty
+
+                        active_trade = {
+                            "direction": signal.direction,
+                            "entry_price": fill_price,
+                            "stop_loss": float(signal.stop_loss),
+                            "take_profit": float(signal.take_profit),
+                            "entry_bar": len(result.bars),
+                            "lots": qty,
+                            "entry_slippage": entry_slippage,
+                        }
+                        result.trades.append(
+                            Trade(
+                                entry_bar=len(result.bars),
+                                exit_bar=-1,
+                                entry_price=fill_price,
+                                exit_price=0.0,
+                                entry_allocation=1.0 if signal.direction == "LONG" else -1.0,
+                                exit_allocation=0.0,
+                                shares_delta=qty if signal.direction == "LONG" else -qty,
+                                pnl=0.0,
+                                pnl_pct=0.0,
+                                holding_bars=0,
+                                exit_reason="OPEN",
+                                direction=signal.direction,
+                                stop_loss=float(signal.stop_loss),
+                                take_profit=float(signal.take_profit),
+                            )
+                        )
+                        rebalanced = True
 
             except Exception as e:
-                LOGGER.debug("Feature/signal computation failed at bar %d: %s", full_idx, e)
+                LOGGER.warning("Feature/signal computation failed at bar %d: %s", full_idx, e)
                 rebalanced = False
                 regime_state = None
                 regime_info = None
-                signal = None
-
-            if pending_rebalance is not None and i >= self.backtest_config.fill_delay_bars:
-                target_shares = (equity * pending_rebalance["target_allocation"]) / (price + 1e-12)
-                delta = target_shares - shares
-                slippage_cost = abs(delta * price * self.backtest_config.slippage_pct)
-                cash -= delta * price + slippage_cost
-                shares = target_shares
-
-                if result.trades:
-                    last_trade = result.trades[-1]
-                    last_trade.exit_price = pending_rebalance["price"]
-                    last_trade.exit_allocation = pending_rebalance["target_allocation"]
-                    last_trade.exit_bar = len(result.bars) - 1
-                    last_trade.holding_bars = last_trade.exit_bar - last_trade.entry_bar
-                    last_trade.pnl = (shares * price - last_trade.shares_delta * pending_rebalance["price"])
-                    last_trade.pnl_pct = (
-                        (last_trade.pnl / (abs(last_trade.shares_delta * last_trade.entry_price) + 1e-12))
-                        if last_trade.shares_delta != 0
-                        else 0.0
-                    )
-
-                result.trades.append(
-                    Trade(
-                        entry_bar=len(result.bars),
-                        exit_bar=-1,
-                        entry_price=pending_rebalance["price"],
-                        exit_price=0.0,
-                        entry_allocation=pending_rebalance["target_allocation"],
-                        exit_allocation=0.0,
-                        shares_delta=delta,
-                        pnl=0.0,
-                        pnl_pct=0.0,
-                        holding_bars=0,
-                    )
-                )
-                pending_rebalance = None
 
             equity = cash + shares * price
             current_alloc = (shares * price) / (equity + 1e-12)
+            target_alloc = 0.0
+            if active_trade is not None:
+                target_alloc = 1.0 if active_trade["direction"] == "LONG" else -1.0
 
             bar = AllocationBar(
                 timestamp=row.name if hasattr(row, "name") else pd.Timestamp(full_idx),
                 price=price,
-                target_allocation=pending_rebalance["target_allocation"]
-                if pending_rebalance
-                else current_alloc,
+                target_allocation=target_alloc,
                 current_allocation=current_alloc,
                 shares=shares,
                 cash=cash,
                 equity=equity,
-                leverage=current_alloc if current_alloc <= 1.0 else 1.0,
+                leverage=min(abs(current_alloc), 1.0),
                 regime_id=regime_state.current_regime_id if regime_state else -1,
                 regime_name=regime_info.label if regime_info else "UNKNOWN",
                 regime_probability=regime_state.state_probability if regime_state else 0.0,
@@ -395,6 +580,59 @@ class WalkForwardBacktester:
                 result.returns.append(
                     (result.equity_curve[-1] - result.equity_curve[-2]) / (result.equity_curve[-2] + 1e-12)
                 )
+
+        if active_trade is not None:
+            final_price = float(oos_data.iloc[-1]["close"])
+            qty = float(active_trade["lots"])
+            trade_direction = active_trade["direction"]
+            entry_slippage = float(active_trade.get("entry_slippage", 0.0))
+            exit_slippage = abs(qty * final_price * self.backtest_config.slippage_pct)
+            total_slippage = entry_slippage + exit_slippage
+
+            if trade_direction == "LONG":
+                cash += qty * final_price - exit_slippage
+                shares -= qty
+                pnl = (final_price - float(active_trade["entry_price"])) * qty - total_slippage
+            else:
+                cash -= qty * final_price + exit_slippage
+                shares += qty
+                pnl = (float(active_trade["entry_price"]) - final_price) * qty - total_slippage
+
+            equity = cash + shares * final_price
+
+            if result.trades:
+                last_trade = result.trades[-1]
+                last_trade.exit_price = final_price
+                last_trade.exit_bar = len(result.bars) - 1
+                last_trade.holding_bars = last_trade.exit_bar - last_trade.entry_bar
+                last_trade.pnl = pnl
+                last_trade.pnl_pct = pnl / (abs(float(active_trade["entry_price"]) * qty) + 1e-12)
+                last_trade.exit_reason = "END_OF_WINDOW"
+
+            active_trade = None
+
+        LOGGER.info("Signal breakdown for OOS window:")
+        LOGGER.info("  Total bars evaluated: %d", signal_stats["total_bars"])
+        LOGGER.info(
+            "  Skipped/no regime:    %d (%.1f%%)",
+            signal_stats["skipped_no_regime"],
+            100 * signal_stats["skipped_no_regime"] / max(signal_stats["total_bars"], 1),
+        )
+        LOGGER.info(
+            "  Blocked (in trade):    %d",
+            signal_stats["blocked_active_trade"],
+        )
+        LOGGER.info(
+            "  CHOP filtered:        %d (%.1f%%)",
+            signal_stats["chop_filtered"],
+            100 * signal_stats["chop_filtered"] / max(signal_stats["total_bars"], 1),
+        )
+        LOGGER.info("  No macro alignment:   %d", signal_stats["no_macro"])
+        LOGGER.info("  Exhaustion filtered:  %d", signal_stats["exhausted"])
+        LOGGER.info("  No pullback:          %d", signal_stats["no_pullback"])
+        LOGGER.info("  LONG signals:         %d", signal_stats["long_signals"])
+        LOGGER.info("  SHORT signals:        %d", signal_stats["short_signals"])
+        LOGGER.info("  Blocked (in trade):    %d", signal_stats["blocked_active_trade"])
 
     @staticmethod
     def _compute_ema(prices: pd.Series, period: int) -> float:
@@ -425,6 +663,24 @@ class WalkForwardBacktester:
         tr = pd.concat([high_low, high_close, low_close], axis=1).max(axis=1)
         atr = tr.rolling(window=period).mean()
         return float(atr.iloc[-1]) if not atr.isna().all() else float(tr.iloc[-1])
+
+    @staticmethod
+    def _compute_causal_percentiles(series: pd.Series) -> pd.Series:
+        """Compute causal percentiles of a series using only past observations."""
+        values = series.to_numpy(dtype=float)
+        percentiles = np.full(len(values), 0.5, dtype=float)
+        history: list[float] = []
+
+        for idx, value in enumerate(values):
+            if np.isnan(value):
+                continue
+            if history:
+                rank = bisect_right(history, value)
+                percentiles[idx] = rank / len(history)
+            history.append(float(value))
+            history.sort()
+
+        return pd.Series(percentiles, index=series.index)
 
 
 # Backward-compatible aliases.

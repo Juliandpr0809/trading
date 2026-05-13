@@ -96,6 +96,136 @@ class PerformanceAnalyzer:
             avg_holding_period=days / max(len(returns), 1),
         )
 
+    def compute_trade_metrics(self, trades: list[Any]) -> dict[str, float]:
+        """Compute trade-level metrics instead of bar-level metrics."""
+        if not trades:
+            return {
+                "total_trades": 0,
+                "winners": 0,
+                "losers": 0,
+                "win_rate": 0.0,
+                "profit_factor": 0.0,
+                "avg_win": 0.0,
+                "avg_loss": 0.0,
+                "avg_rr_achieved": 0.0,
+                "expectancy_per_trade": 0.0,
+                "tp_hit_count": 0,
+                "sl_hit_count": 0,
+                "flat_exit_count": 0,
+            }
+
+        closed = [
+            trade
+            for trade in trades
+            if getattr(trade, "exit_price", 0.0) > 0
+            and getattr(trade, "pnl", 0.0) != 0.0
+            and getattr(trade, "exit_reason", "") not in ("", "OPEN")
+        ]
+        if not closed:
+            return {
+                "total_trades": 0,
+                "winners": 0,
+                "losers": 0,
+                "win_rate": 0.0,
+                "profit_factor": 0.0,
+                "avg_win": 0.0,
+                "avg_loss": 0.0,
+                "avg_rr_achieved": 0.0,
+                "expectancy_per_trade": 0.0,
+                "tp_hit_count": 0,
+                "sl_hit_count": 0,
+                "flat_exit_count": 0,
+            }
+
+        winners = [trade for trade in closed if getattr(trade, "pnl", 0.0) > 0]
+        losers = [trade for trade in closed if getattr(trade, "pnl", 0.0) <= 0]
+        tp_hits = [trade for trade in closed if getattr(trade, "exit_reason", "") == "TP_HIT"]
+        sl_hits = [trade for trade in closed if getattr(trade, "exit_reason", "") == "SL_HIT"]
+        flat_exits = [trade for trade in closed if getattr(trade, "exit_reason", "") == "REGIME_FLAT"]
+
+        gross_profit = sum(float(getattr(trade, "pnl", 0.0)) for trade in winners)
+        gross_loss = abs(sum(float(getattr(trade, "pnl", 0.0)) for trade in losers))
+        avg_win = gross_profit / max(len(winners), 1)
+        avg_loss = gross_loss / max(len(losers), 1)
+
+        avg_hold_bars = sum(float(getattr(trade, "holding_bars", 0.0)) for trade in closed) / max(len(closed), 1)
+
+        LOGGER.info("EXIT REASON BREAKDOWN:")
+        LOGGER.info(
+            "  TP hits:       %d  (%.1f%%)",
+            len(tp_hits),
+            100 * len(tp_hits) / max(len(closed), 1),
+        )
+        LOGGER.info(
+            "  SL hits:       %d  (%.1f%%)",
+            len(sl_hits),
+            100 * len(sl_hits) / max(len(closed), 1),
+        )
+        LOGGER.info(
+            "  Regime FLAT:   %d  (%.1f%%)",
+            len(flat_exits),
+            100 * len(flat_exits) / max(len(closed), 1),
+        )
+        LOGGER.info("  Avg hold bars: %.1f", avg_hold_bars)
+        LOGGER.info("  Avg Win  $:    %.2f", avg_win)
+        LOGGER.info("  Avg Loss $:    %.2f", avg_loss)
+        LOGGER.info("  RR achieved:   %.2f", avg_win / max(avg_loss, 1e-12))
+
+        # Diagnostic sample to verify trade fields before TRUE RR calculation.
+        for i, trade in enumerate(closed[:5]):
+            LOGGER.info(
+                "TRADE DEBUG [%d]: dir=%s entry=%.2f exit=%.2f sl=%.2f tp=%.2f reason=%s pnl=%.2f",
+                i,
+                getattr(trade, "direction", "N/A"),
+                float(getattr(trade, "entry_price", 0.0)),
+                float(getattr(trade, "exit_price", 0.0)),
+                float(getattr(trade, "stop_loss", 0.0)),
+                float(getattr(trade, "take_profit", 0.0)),
+                getattr(trade, "exit_reason", "N/A"),
+                float(getattr(trade, "pnl", 0.0)),
+            )
+
+        # Compute TRUE RR in points (not dollars)
+        rr_per_trade = []
+        for trade in closed:
+            entry = float(getattr(trade, "entry_price", 0.0))
+            exit_p = float(getattr(trade, "exit_price", 0.0))
+            sl = float(getattr(trade, "stop_loss", 0.0))
+            direction = getattr(trade, "direction", "")
+
+            if entry <= 0 or sl <= 0:
+                continue
+
+            sl_distance = abs(entry - sl)
+            if sl_distance < 1e-6:
+                continue
+
+            if direction == "LONG":
+                points_captured = exit_p - entry
+            else:
+                points_captured = entry - exit_p
+
+            rr_this_trade = points_captured / sl_distance
+            rr_per_trade.append(rr_this_trade)
+
+        true_avg_rr = float(np.mean(rr_per_trade)) if rr_per_trade else 0.0
+        LOGGER.info("  TRUE RR (puntos): %.2f  (n=%d trades)", true_avg_rr, len(rr_per_trade))
+
+        return {
+            "total_trades": len(closed),
+            "winners": len(winners),
+            "losers": len(losers),
+            "win_rate": float(len(winners) / len(closed)),
+            "profit_factor": float(gross_profit / (gross_loss + 1e-12)) if gross_loss > 0 else 0.0,
+            "avg_win": float(avg_win),
+            "avg_loss": float(avg_loss),
+            "avg_rr_achieved": float(avg_win / (avg_loss + 1e-12)) if avg_loss > 0 else 0.0,
+            "expectancy_per_trade": float((gross_profit - gross_loss) / len(closed)),
+            "tp_hit_count": len(tp_hits),
+            "sl_hit_count": len(sl_hits),
+            "flat_exit_count": len(flat_exits),
+        }
+
     def _compute_profit_factor(self, returns: np.ndarray) -> float:
         """Compute profit factor: sum(wins) / abs(sum(losses))."""
         wins = returns[returns > 0].sum()

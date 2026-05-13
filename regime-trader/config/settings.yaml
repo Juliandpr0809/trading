@@ -1,5 +1,6 @@
 # Central configuration for regime-trader.
-# Update these defaults to match your broker account and risk profile.
+# All bar counts are calibrated for M5 timeframe.
+# 1 trading day = 288 M5 bars (24h * 60min / 5min)
 
 broker:
   paper_trading: true
@@ -11,11 +12,80 @@ hmm:
   n_components: [2, 3, 4]
   cv_tol: 1e-3
   cv_max_iter: 200
-  train_bars: 504
-  stability_bars: 5
-  flicker_window: 40
-  flicker_threshold: 2
-  min_confidence: 0.95
+  train_bars: 14400           # Full IS window on M5
+  stability_bars: 12          # 12 consecutive M5 bars = 1 hour
+  flicker_window: 120         # ~10 hours lookback
+  flicker_threshold: 3
+  min_confidence: 0.90
+  min_train_bars: 8640        # 30 trading days of M5 minimum
+  retrain_interval_bars: 288   # 1 trading day of M5
+
+backtest:
+  is_window: 14400
+  oos_window: 2880
+  step_size: 2880
+  min_train_bars: 8640
+
+liquidity_backtest:
+  is_window_days: 300
+  oos_window_days: 60
+  step_size_days: 60
+  min_train_days: 200
+
+liquidity_strategy:
+  symbol: "US30m"
+
+  # Conversion horaria broker -> Colombia
+  # Ejemplo actual: broker 00:09 y Colombia 19:09 -> usar -5
+  broker_to_colombia_hours: -5
+  use_colombia_session_times: true
+  session_start_colombia_time: "08:00"
+  session_end_colombia_time: "12:00"
+  entry_cutoff_colombia_time: "11:00"
+
+  # Ventana de escaneo de niveles HH/LL
+  # Solo sesion asiatica - excluye ruido de sesion americana
+  scan_start_server_time: "02:00"   # UTC+3
+  scan_end_server_time: "11:00"     # UTC+3 (08:00 ET)
+
+  # Ventana operativa en hora del broker
+  # Objetivo operativo del trader: 08:00-12:00 Colombia
+  session_start_server_time: "13:00"
+  session_end_server_time: "17:00"
+  entry_cutoff_server_time: "16:00"
+
+  server_timezone: "UTC+0"
+
+  # Timeframes
+  timeframe_context: "M30"
+  timeframe_entry: "M5"
+
+  # Parametros de deteccion
+  max_trades_per_day: 1
+  rr_ratio: 2.0
+  risk_percent: 0.01
+
+  # Patron PVC
+  min_candle_body_points: 5.0
+  entry_offset_points: 3.0
+  sl_offset_points: 10.0
+  min_sl_points: 30.0
+  max_sl_points: 150.0
+
+  # Gestion
+  breakeven_at_rr: 1.0
+  rejection_zone_points: 20.0
+
+  # Filtros activos
+  min_rr_to_trade: 1.0
+  # fib_filter eliminado - mentor opera con fib alto
+
+  # Magic number MT5
+  magic_number: 202602
+
+  # Alertas
+  alert_sound: true
+  alert_log_path: "monitoring/alert_log.csv"
 
 strategy:
   risk_percent: 0.01
@@ -23,9 +93,10 @@ strategy:
   ema_200_period: 200
   atr_period: 14
   pullback_lookback: 5
-  swing_lookback: 20
+  swing_lookback: 8
   exhaustion_atr_threshold: 2.0
   rr_ratio: 2.0
+  min_sl_atr_multiplier: 1.5
 
 risk:
   max_risk_per_trade: 0.01
@@ -42,6 +113,8 @@ risk:
   peak_dd_halt: 0.10
 
 model_path: models/hmm_model.pkl
+
+backtest_data_path: data/feeds/USTEC_M5.csv
 
 monitoring:
   dashboard_refresh_seconds: 5

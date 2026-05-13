@@ -55,6 +55,15 @@ class SignalGenerator:
         self.feature_engineer = feature_engineer or FeatureEngineer()
         self.strategy = RegimeStrategy(config=self.strategy_config)
         self.last_signals: dict[str, TradeSignal] = {}
+        self._account_equity = 10_000.0  # Default; can be set via set_account_equity()
+
+    def set_account_equity(self, equity: float) -> None:
+        """Set account equity for position sizing.
+        
+        Args:
+            equity: Current account equity in base currency
+        """
+        self._account_equity = equity
 
     def generate(
         self,
@@ -138,6 +147,26 @@ class SignalGenerator:
             
             distance_from_ema200 = (latest["close"] - ema_200) / ema_200 if ema_200 > 0 else 0.0
             
+            # Calculate real volatility percentile (normalized rolling std)
+            close_prices = ohlcv_data["close"]
+            if len(close_prices) >= 20:
+                # Compute all rolling stds once
+                rolling_stds = close_prices.rolling(20).std()
+                current_std = rolling_stds.iloc[-1]
+                
+                if pd.notna(current_std) and current_std > 0:
+                    # Count how many historical stds are <= current
+                    historical = rolling_stds.dropna().iloc[:-1]  # exclude current
+                    if len(historical) > 0:
+                        percentile = (historical <= current_std).sum() / len(historical)
+                        volatility_percentile = max(0.0, min(1.0, float(percentile)))
+                    else:
+                        volatility_percentile = 0.5
+                else:
+                    volatility_percentile = 0.5
+            else:
+                volatility_percentile = 0.5
+            
             setup = TechnicalSetup(
                 price=latest["close"],
                 ema_9=ema_9,
@@ -147,15 +176,17 @@ class SignalGenerator:
                 swing_high=swing_high,
                 swing_low=swing_low,
                 distance_from_ema200=distance_from_ema200,
-                volatility_percentile=regime_state.state_probability,
+                volatility_percentile=volatility_percentile,
             )
             
-            # Evaluate strategy signal
+            # Evaluate strategy signal (pass account_equity if available, default 10000)
+            account_equity = getattr(self, '_account_equity', 10_000.0)
             strategy_signal = self.strategy.evaluate_signal(
                 symbol=symbol,
                 regime_state=regime_state,
                 regime_info_map=self.hmm_engine.regime_info,
                 setup=setup,
+                account_equity=account_equity,
             )
             
             # Convert to TradeSignal
@@ -169,7 +200,7 @@ class SignalGenerator:
                 confidence=regime_state.state_probability,
                 entry_price=setup.price,
                 stop_loss=strategy_signal.stop_loss,
-                take_profit=setup.price + (setup.atr_14 * 2) if strategy_signal.direction == "LONG" else setup.price - (setup.atr_14 * 2),
+                take_profit=strategy_signal.take_profit,
                 direction=strategy_signal.direction,
                 timestamp=timestamp,
                 reasoning=strategy_signal.reasoning,
@@ -201,12 +232,25 @@ class SignalGenerator:
 
     @staticmethod
     def _compute_vwap(ohlcv: pd.DataFrame) -> float:
-        """Compute volume-weighted average price."""
+        """Compute session-anchored volume-weighted average price."""
         if ohlcv.empty:
             return 0.0
-        typical_price = (ohlcv["high"] + ohlcv["low"] + ohlcv["close"]) / 3.0
-        cum_pv = (typical_price * ohlcv["volume"]).sum()
-        cum_v = ohlcv["volume"].sum()
+
+        if isinstance(ohlcv.index, pd.DatetimeIndex):
+            last_date = ohlcv.index[-1].date()
+            session_data = ohlcv[ohlcv.index.date == last_date]
+        else:
+            # Fallback for non-datetime index: approximate intraday session.
+            session_data = ohlcv.tail(96)
+
+        if session_data.empty:
+            session_data = ohlcv.tail(96)
+
+        typical_price = (
+            session_data["high"] + session_data["low"] + session_data["close"]
+        ) / 3.0
+        cum_pv = (typical_price * session_data["volume"]).sum()
+        cum_v = session_data["volume"].sum()
         return float(cum_pv / (cum_v + 1e-12))
 
     @staticmethod

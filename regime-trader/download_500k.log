@@ -1,0 +1,3 @@
+[OK] Symbol resolved: USTECm
+Downloading 500,000 M5 bars for USTECm...
+[FAIL] No data returned. MT5 error: (-2, 'Terminal: Invalid params')

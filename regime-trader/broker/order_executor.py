@@ -30,10 +30,11 @@ class OrderResponse:
 class OrderExecutor:
     """Executes and manages broker orders via MetaTrader5."""
 
-    MAGIC_NUMBER = 202604  # Bot-identifying magic number
+    DEFAULT_MAGIC_NUMBER = 202604  # Bot-identifying magic number (default for Regime strategy)
 
-    def __init__(self, mt5_client: Any | None = None) -> None:
+    def __init__(self, mt5_client: Any | None = None, magic_number: int | None = None) -> None:
         self.mt5_client = mt5_client
+        self.magic_number = magic_number or self.DEFAULT_MAGIC_NUMBER
         self.order_history: list[OrderResponse] = []
 
     # ------------------------------------------------------------------
@@ -131,7 +132,7 @@ class OrderExecutor:
                 "sl": sl if sl > 0 else 0.0,
                 "tp": tp if tp > 0 else 0.0,
                 "deviation": 20,
-                "magic": self.MAGIC_NUMBER,
+                "magic": self.magic_number,
                 "comment": comment,
                 "type_time": mt5.ORDER_TIME_GTC,
                 "type_filling": mt5.ORDER_FILLING_IOC,
@@ -217,7 +218,7 @@ class OrderExecutor:
                 "position": ticket,
                 "price": price,
                 "deviation": 20,
-                "magic": self.MAGIC_NUMBER,
+                "magic": self.magic_number,
                 "comment": f"Close #{ticket}",
                 "type_time": mt5.ORDER_TIME_GTC,
                 "type_filling": mt5.ORDER_FILLING_IOC,

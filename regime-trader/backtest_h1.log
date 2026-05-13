@@ -1,0 +1,18 @@
+2026-04-30 21:48:10,815 [INFO] __main__: Starting walk-forward backtest…
+2026-04-30 21:48:10,855 [INFO] __main__: Loaded 1000 bars from data/feeds/USTEC_M5.csv
+2026-04-30 21:48:10,855 [INFO] __main__: Resampling M5 data to H1...
+2026-04-30 21:48:10,869 [INFO] __main__: Resampled to H1: 84 bars
+Traceback (most recent call last):
+  File "C:\Users\USER\Desktop\Trading\regime-trader\main.py", line 735, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\USER\Desktop\Trading\regime-trader\main.py", line 723, in main
+    run_backtester(args.config)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\USER\Desktop\Trading\regime-trader\main.py", line 648, in run_backtester
+    results = backtester.run(price_data)
+  File "C:\Users\USER\Desktop\Trading\regime-trader\backtest\backtester.py", line 159, in run
+    raise ValueError(
+        f"Insufficient data. Need at least {self.backtest_config.min_train_bars} bars."
+    )
+ValueError: Insufficient data. Need at least 720 bars.
